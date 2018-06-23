@@ -3,10 +3,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+    <link rel="shortcut icon" href="../assets/images/favicon.ico"  type="image/x-icon">
     <title>JMD ERP Solutions</title>
-
     <!-- Bootstrap -->
     <link href="assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -15,16 +13,13 @@
     <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-<%--    <link href="assets/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">--%>
+
     <!-- bootstrap-progressbar -->
     <link href="assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
     <link href="assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
     <!-- bootstrap-daterangepicker -->
     <link href="assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <script src="assets/js/StandardValidation.js"></script>
-
-    
 
     <asp:ContentPlaceHolder ID="head" runat="server" />
 
@@ -64,22 +59,29 @@
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
                                 <h3>General</h3>
-                                <ul class="nav side-menu">
+                                <ul class="nav side-menu">                               
+                                    <li><a><i class="fa fa-cog"></i>Standard Codes<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="AcademicSession.aspx">Academic Session </a></li>
+                                            <li><a href="BoardSetting.aspx">Board</a></li>
+                                            <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>
+                                            <li><a href="BloodGroupSetting.aspx">Blood Group</a></li>
+                                            <li><a href="ClassSetting.aspx">Class</a></li>
+                                            <li><a href="CountrySetting.aspx">Country</a></li>
+                                            <li><a href="MotherTongueSetting.aspx">Mother Tongue</a></li>
+                                            <li><a href="NationalitySetting.aspx">Nationality</a></li>    
+                                            
+                                             <li><a href="ReligionSetting.aspx">Religion</a></li>  
+                                            <li><a href="SectionSetting.aspx">Section</a></li>                                            
+                                            <li><a href="TitleSetting.aspx">Title</a></li>
+                                            
+                                        </ul>
+                                    </li>
                                     <li><a><i class="fa fa-home"></i>Home <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/">Dashboard</a></li>
                                             <li><a href="Default2.aspx">Dashboard2</a></li>
                                             <li><a href="Default3.aspx">Dashboard3</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-cog"></i>Setting<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="AcademicSession.aspx">Academic Session </a></li>
-                                            <li><a href="TitleSetting.aspx">Title</a></li>
-                                            <li><a href="form_validation.aspx">Form Validation</a></li>
-                                            <li><a href="form_wizards.aspx">Form Wizard</a></li>
-                                            <li><a href="form_upload.aspx">Form Upload</a></li>
-                                            <li><a href="form_buttons.aspx">Form Buttons</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-cog"></i>UI Elements <span class="fa fa-chevron-down"></span></a>
@@ -288,16 +290,12 @@
 
                 <!-- footer content -->
                 <footer>
-                    <div class="pull-left">
-                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-                    </div>
                     <div class="clearfix"></div>
                 </footer>
                 <!-- /footer content -->
             </div>
         </div>
-
-        <!-- jQuery -->
+         <!-- jQuery -->
         <script src="assets/vendors/jquery/dist/jquery.min.js"></script>
         <!-- Bootstrap -->
         <script src="assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>

@@ -32,17 +32,9 @@
                         <div class="x_content">
                             <br />
                             <div id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-<%--                                <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                                        Title<span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" maxlength="50" runat="server" id="txtTitleName" required="required" class="form-control col-md-7 col-xs-12">
-                                    </div>
-                                            <asp:HiddenField ID="hdnFlag" runat="server" />   
-                                </div>--%>
                                 <asp:HiddenField ID="hdnFlag" runat="server" />   
+                                <asp:HiddenField ID="hdnDate" runat="server" />   
+
                                 <div class="form-horizontal form-label-left input_mask">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-12" for="ASStart">Academic Session	
                                     <span class="required">*</span>
@@ -66,7 +58,7 @@
                                         <div class="control-group">
                                             <div class="controls">
                                                 <div class="col-md-6 xdisplay_inputx form-group has-feedback">
-                                                    <input type="text" runat="server" class="form-control has-feedback-center" id="single_cal3" aria-describedby="inputSuccess2Status3" >
+                                                    <input type="text"  class="form-control has-feedback-center" id="single_cal3" aria-describedby="inputSuccess2Status3" required="required" >
                                                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                                     <span id="inputSuccess2Status3" class="sr-only">(success)</span>
                                                 </div>
@@ -77,7 +69,7 @@
                                         <div class="control-group">
                                             <div class="controls">
                                                 <div class="col-md-6 xdisplay_inputx form-group has-feedback">
-                                                    <input type="text" runat="server" class="form-control has-feedback-center" id="single_cal4" aria-describedby="inputSuccess2Status4"  >
+                                                    <input type="text"  class="form-control has-feedback-center" id="single_cal4" aria-describedby="inputSuccess2Status4" required="required" >
                                                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
                                                     <span id="inputSuccess2Status4" class="sr-only">(success)</span>
                                                 </div>
@@ -92,7 +84,7 @@
                                         <asp:Button id="btnNew" type="submit" runat="server" OnClientClick="return fNew()"  class="btn btn-primary" Text="New" />
                                         <asp:Button id="btnEdit" type="button" runat="server" OnClientClick="return fEdit()"  class="btn btn-primary" Text="Edit" />
                                         <asp:Button id="btnDelete" type="submit" runat="server" OnClientClick="return fValidateDelete()"  OnClick="btnDelete_Click" class="btn btn-primary" Text="Delete" />
-                                        <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" OnClick="btnSave_Click" Text="Save"/>
+                                        <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" OnClick="btnSave_Click"  OnClientClick="return fSave()" Text="Save"/>
                                         <asp:Button ID="btnReset" runat="server"  class="btn btn-primary" OnClientClick="return fReset()" Text="Reset"/>
                                     </div>
                                 </div>
@@ -150,7 +142,6 @@
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
     <script type="text/javascript">
         function addRowHandlers() {
-           
     var table = document.getElementById("tableId");
     var rows = table.getElementsByTagName("tr");
     for (i = 0; i < rows.length; i++) {
@@ -159,27 +150,23 @@
             function(row) 
             {
                 return function () {
+                    debugger;
                                         var cell = row.getElementsByTagName("td")[0];
                                         var titleText = cell.innerHTML;
-                                        $('#main_inputAS1').val(row.getElementsByTagName("td")[0].cell.innerHTML);
-                                        $('#main_inputAS2').val(row.getElementsByTagName("td")[1].cell.innerHTML);
-                                        //$('#single_cal3').val(row.getElementsByTagName("td")[2].cell.innerHTML);
-                                        //$('#single_cal4').val(row.getElementsByTagName("td")[3].cell.innerHTML);
-                                        $('#main_hdnFlag').val(row.getElementsByTagName("td")[0].cell.innerHTML);
-                                        $('#main_inputAS1').prop("disabled", true);
-                                        $('#main_inputAS1').prop("disabled", true);
-                                        //$('#single_cal3').prop("disabled", true);
-                                        //$('#single_cal4').prop("disabled", true);
-                                        $('#main_btnNew').attr('disabled', true);
-                                        $('#main_btnEdit').attr('disabled', false);
-                                        $('#main_btnSave').attr('disabled', true);
-                                        //$('#main_btnDelete').attr('disabled', false);
-                                        //if ($('#main_txtTitleName').val() == "") {
-                                        //    $('btnReset').attr('disabled', false);
-                                        //}
-                                        //else {
-                                        //    $('btnReset').attr('disabled', true);
-                                        //}
+                                        $('#<%=inputAS1.ClientID%>').val(row.getElementsByTagName("td")[0].innerHTML);
+                                        $('#<%=inputAS2.ClientID%>').val(row.getElementsByTagName("td")[1].innerHTML);
+                                        $('#single_cal3').val(row.getElementsByTagName("td")[2].innerHTML);
+                                        $('#single_cal4').val(row.getElementsByTagName("td")[3].innerHTML);
+                                        $('#<%=hdnFlag.ClientID%>').val(row.getElementsByTagName("td")[0].innerHTML + "^" + row.getElementsByTagName("td")[2].innerHTML + "^" + row.getElementsByTagName("td")[3].innerHTML);
+                                        $('#<%=inputAS1.ClientID%>').prop("disabled", true);
+                                        $('#<%=inputAS1.ClientID%>').prop("disabled", true);
+                                        $('#single_cal3').prop("disabled", true);
+                                        $('#single_cal4').prop("disabled", true);
+                                        $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                                        $('#<%=btnEdit.ClientID%>').attr('disabled', false);
+                                        $('#<%=btnSave.ClientID%>').attr('disabled', true);
+                                        $('#<%=btnDelete.ClientID%>').attr('disabled', false);
+
                                 };
             };
 
@@ -187,82 +174,70 @@
     }
 }
         function fControlStatus() {
-            if ($('#main_txtTitleName').val() == "") {
-                $('btnReset').attr('disabled', false);
-            }
-            else {
-                $('btnReset').attr('disabled', true);
-            }
-            var hdnFlagValue = $('#main_hdnFlag').val();
+            var hdnFlagValue = $('#<%=hdnFlag.ClientID%>').val();
             if (hdnFlagValue == "") {
-                $('#main_btnNew').attr('disabled', false);
-                $('#main_btnEdit').attr('disabled', true);
-                $('#main_btnSave').attr('disabled', true);
-                $('#main_btnDelete').attr('disabled', true);
-                $('#main_txtTitleName').prop("disabled", true);
-                $('#main_inputAS1').prop("disabled", true);
-                $('#main_inputAS2').prop("disabled", true);
-                //$('#single_cal3').prop("disabled", true);
-                //$('#single_cal4').prop("disabled", true);
+                $('#<%=btnNew.ClientID%>').attr('disabled', false);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', true);
+                $('#<%=btnDelete.ClientID%>').attr('disabled', true);
+                $('#<%=inputAS1.ClientID%>').prop("disabled", true);
+                $('#<%=inputAS2.ClientID%>').prop("disabled", true);
+                $('#single_cal3').prop("disabled", true);
+                $('#single_cal4').prop("disabled", true);
             }
             else {
-                $('#main_btnEdit').attr('disabled', true);
-                $('#main_btnNew').attr('disabled', true);
-                $('#main_btnSave').attr('disabled', false);
-                $('#main_btnDelete').attr('disabled', true);
-                $('#main_txtTitleName').prop("disabled", true);
-                $('#main_inputAS1').prop("disabled", true);
-                $('#main_inputAS2').prop("disabled", true);
-                //$('#single_cal3').prop("disabled", true);
-                //$('#single_cal4').prop("disabled", true);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', false);
+                $('#<%=btnDelete.ClientID%>').attr('disabled', true);
+                $('#<%=inputAS1.ClientID%>').prop("disabled", true);
+                $('#<%=inputAS2.ClientID%>').prop("disabled", true);
+                $('#single_cal3').prop("disabled", true);
+                $('#single_cal4').prop("disabled", true);
             }
+        }
+        function fSave()
+        {
+            debugger;
+            $('#<%=hdnDate.ClientID%>').val($('#single_cal3').val() + "~" + $('#single_cal4').val());
+           // return false;
         }
         function fNew()
         {
-            $('#main_btnNew').attr('disabled', true);
-            $('#main_btnEdit').attr('disabled', true);
-            $('#main_btnSave').attr('disabled', false);
-            $('#main_btnDelete').attr('disabled', true);
-            $('#main_inputAS1').prop("disabled", false);
-            $('#main_inputAS2').prop("disabled", false);
-            //$('#single_cal3').prop("disabled", false);
-            //$('#single_cal4').prop("disabled", false);
-            $('#main_hdnFlag').val("N^");
-            if ($('#main_txtTitleName').val()=="")
-            {
-                $('btnReset').attr('disabled', false);
-            }
-            else
-            {
-                $('btnReset').attr('disabled', true);
-            }
+            $('#<%=btnNew.ClientID%>').attr('disabled', true);
+            $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+            $('#<%=btnSave.ClientID%>').attr('disabled', false);
+            $('#<%=btnDelete.ClientID%>').attr('disabled', true);
+            $('#<%=inputAS1.ClientID%>').prop("disabled", false);
+            $('#<%=inputAS2.ClientID%>').prop("disabled", false);
+            $('#single_cal3').prop("disabled", false);
+            $('#single_cal4').prop("disabled", false);
+            $('#<%=hdnFlag.ClientID%>').val("N^");
             return false;
         }
         function fReset()
         {
-            $('#main_txtTitleName').prop("disabled", true);
-            $('#main_btnNew').attr('disabled', false);
-            $('#main_btnEdit').attr('disabled', true);
-            $('#main_btnSave').attr('disabled', true);
-            $('#main_btnDelete').attr('disabled', true);
-            $('#main_hdnFlag').val("");
-            $('#main_inputAS1').focus();
-            $('#main_inputAS1').val("");
-            $('#main_inputAS2').val("");
+            $('#<%=btnNew.ClientID%>').attr('disabled', false);
+            $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+            $('#<%=btnSave.ClientID%>').attr('disabled', true);
+            $('#<%=btnDelete.ClientID%>').attr('disabled', true);
+            $('#<%=hdnFlag.ClientID%>').val("");
+            $('#<%=inputAS1.ClientID%>').focus();
+            $('#<%=inputAS1.ClientID%>').val("");
+            $('#<%=inputAS2.ClientID%>').val("");
             return false;
         }
         function fEdit()
         {
-            $('#main_btnNew').attr('disabled', true);
-            $('#main_btnEdit').attr('disabled', true);
-            $('#main_btnSave').attr('disabled', false);
-            $('#main_btnDelete').attr('disabled', true);
-            $('#main_hdnFlag').val($('#main_hdnFlag').val() + "^E")
-            $('#main_inputAS1').prop("disabled", false);
-            $('#main_inputAS2').prop("disabled", false);
-            //$('#single_cal3').prop("disabled", false);
-            //$('#single_cal4').prop("disabled", false);
-            $('#main_txtTitleName').focus();
+            $('#<%=btnNew.ClientID%>').attr('disabled', true);
+            $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+            $('#<%=btnSave.ClientID%>').attr('disabled', false);
+            $('#<%=btnDelete.ClientID%>').attr('disabled', true);
+            $('#<%=hdnFlag.ClientID%>').val($('#<%=hdnFlag.ClientID%>').val() + "^E")
+            $('#<%=inputAS1.ClientID%>').prop("disabled", true);
+            $('#<%=inputAS2.ClientID%>').prop("disabled", true);
+            $('#single_cal3').prop("disabled", false);
+            $('#single_cal4').prop("disabled", false);
             return false;
         }          
         window.onload = addRowHandlers();
@@ -276,24 +251,24 @@
             });
 
 
-            //$("#single_cal3").keydown(function (event) {
-            //    $("#single_cal3").datepicker({
-            //        inline: true,
-            //        changeMonth: true,
-            //        changeYear: true,
-            //        minDate: -20,
-            //        maxDate: "+1M +1D"
-            //    });
-            //});
-            //$("#single_cal4").keydown(function (event) {
-            //    $("#single_cal3").datepicker({
-            //        inline: true,
-            //        changeMonth: true,
-            //        changeYear: true,
-            //        minDate: -20,
-            //        maxDate: "+1M +1D"
-            //    });
-            //});
+            $("#single_cal3").keydown(function (event) {
+                $("#single_cal3").datepicker({
+                    inline: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: -20,
+                    maxDate: "+1M +1D"
+                });
+            });
+            $("#single_cal4").keydown(function (event) {
+                $("#single_cal3").datepicker({
+                    inline: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: -20,
+                    maxDate: "+1M +1D"
+                });
+            });
              fControlStatus();
              $('a.foo.bar[rel="nameClose"]').click(function () {
                  fredirect();

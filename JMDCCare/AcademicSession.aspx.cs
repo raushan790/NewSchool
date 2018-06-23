@@ -17,6 +17,11 @@ public partial class AcademicSession : System.Web.UI.Page
     protected static string strType;
     protected void Page_Load(object sender, EventArgs e)
     {
+        if(!IsPostBack)
+        {
+            inputAS1.Attributes.Add("AutoComplete", "off");
+            inputAS2.Attributes.Add("AutoComplete", "off");
+        }
         Session["Type"] = "1";
         if ((Session["Type"] == null) || (Session["Type"].ToString() == "1"))
         {
@@ -26,6 +31,7 @@ public partial class AcademicSession : System.Web.UI.Page
         {
             strType = "rtl";
         }
+
         BindData();
     }
     protected void BindData()
@@ -66,7 +72,7 @@ public partial class AcademicSession : System.Web.UI.Page
     }
     private DataTable GetData()
     {
-        DataTable dt = objDbutility.BindDataTable("SELECT AcaStart,StartDate,EndDate FROM AcademicSessionSetting  WHERE AcaStart<>0 ORDER BY AcaStart");
+        DataTable dt = objDbutility.BindDataTable("SELECT AcaStart [Start Year], AcaStart+1 as [Academic Session],  Convert (varchar, StartDate, 103) as [Start Date],Convert (varchar, EndDate,103) as [End Date] FROM AcademicSessionSetting  WHERE AcaStart<>0 ORDER BY AcaStart");
         return dt;
     }
     protected void btnSave_Click(object sender, EventArgs e)
@@ -75,9 +81,9 @@ public partial class AcademicSession : System.Web.UI.Page
         {
             string strResult = "";
             string[] strArray = hdnFlag.Value.Split('^');
-            if (strArray[0] == "N" || (strArray[1] == "E" && strArray[0].Trim().ToUpper() != inputAS1.Value.Trim().ToUpper()))
+            if (strArray[0] == "N" || (strArray[3] == "E" && strArray[0].Trim().ToUpper() != inputAS1.Value.Trim().ToUpper() && hdnDate.Value.Split('~')[0]== strArray[1] && hdnDate.Value.Split('~')[1] == strArray[2]))
             {
-                if (objDbutility.ReturnNumericValue("SELECT COUNT(AcaStart) from AcademicSessionSetting WHERE UPPER(TitleName)='" + inputAS1.Value.Trim().Replace("'", "''").ToUpper() + "'") > 0)
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(AcaStart) from AcademicSessionSetting WHERE UPPER(AcaStart)='" + inputAS1.Value.Trim().Replace("'", "''").ToUpper() + "'") > 0)
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", "Title");
                     ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
@@ -94,14 +100,16 @@ public partial class AcademicSession : System.Web.UI.Page
                 else
                 {
                     strResult = objDbutility.ExecuteQuery("INSERT INTO AcademicSessionSetting(AcaStart,StartDate,EndDate,EntryUserID,EntryDate) SELECT '" + inputAS1.Value.Trim().Replace("'", "''") + "',"+
-                        " '" + inputAS1.Value.Trim().Replace("'", "''") + "'+1,'"+ Convert.ToDateTime(single_cal3.Value) + "','" + Convert.ToDateTime(single_cal4.Value) + "'," + Convert.ToInt32(Session["UID"]) + ",GetDate() from AcademicSessionSetting");
+                        "Convert(datetime, '" + hdnDate.Value.Split('~')[0] + "', 103 ),Convert(datetime,'" + hdnDate.Value.Split('~')[1]+"',103),0,GetDate() ");
                     inputAS1.Value = "";
+                    inputAS2.Value = "";
                 }
             }
             else
             {
-                strResult = objDbutility.ExecuteQuery("Update AcademicSessionSetting Set StartDate= '" + Convert.ToDateTime(single_cal3.Value) + "', EndDate='" + Convert.ToDateTime(single_cal4.Value) + "'  Where AcaStart='" + strArray[0] + "'");
+                strResult = objDbutility.ExecuteQuery("Update AcademicSessionSetting Set StartDate= Convert(datetime,'" + hdnDate.Value.Split('~')[0] + "',103), EndDate=Convert(datetime,'" + hdnDate.Value.Split('~')[1] +"',103) Where AcaStart='" + strArray[0] + "'");
                 inputAS1.Value = "";
+                inputAS2.Value = "";
             }
             BindData();
             if (strResult == "")

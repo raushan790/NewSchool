@@ -976,7 +976,7 @@ public class Dbutility
                     }
                     if (strMessage == "129_2")
                     {
-                        StrReturn = "Logger User Can't Delete";
+                        StrReturn = "Logger User Can'txtinput Delete";
                     }
                     //For Fine Setting Details
                     if (strMessage == "1012_1")
@@ -1172,7 +1172,7 @@ public class Dbutility
                     }
                     if (strMessage == "129_2")
                     {
-                        //StrReturn = "Logger User Can't Delete";
+                        //StrReturn = "Logger User Can'txtinput Delete";
                         StrReturn = "/خللثق ‘سثق {شىطف [ثمثفث";
                     }
                     //For Fine Setting Details
@@ -1295,7 +1295,7 @@ public class Dbutility
                         //exception names)
                         //throw new ConnectivityNotFoundException(@"There doest seem to be a network/internet connection.\r\n 
                         //Please contact your system administrator");
-                        //use this is if you don't your own custom exception library
+                        //use this is if you don'txtinput your own custom exception library
                         //                    throw new Exception(@"There doest seem to be a network/internet connection.\r\n 
                         //                    Please contact your system administrator");
                     }
@@ -1309,7 +1309,7 @@ public class Dbutility
             //library you use for you applications (use you own
             //exception names)
             //catch (ConnectivityNotFoundException ex)
-            //use this line if you don't have your own custom exception 
+            //use this line if you don'txtinput have your own custom exception 
             //library
             catch (Exception ex)
             {
@@ -1326,11 +1326,15 @@ public class Dbutility
             return replaceStr.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "");
 
         }
-        public string fReplaceChar(TextBox t)
+        public string fReplaceChar(HtmlInputText txtinput)
         {
-            return "LEFT('" + t.Text.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + t.MaxLength + ")";
+            return "LEFT('" + txtinput.Value.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + txtinput.MaxLength + ")";
         }
-        public bool pCheckText(Control Parent)
+        public string fReplaceChar(string txtinput)
+        {
+            return "LEFT('" + txtinput.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + txtinput.Length+1 + ")";
+        }
+    public bool pCheckText(Control Parent)
         {
             string strSession = "";
             foreach (Control frmControl in Parent.Controls)

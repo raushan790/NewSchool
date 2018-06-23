@@ -130,7 +130,7 @@
         //
         // handle all the possible options overriding defaults
         //
-
+        debugger;
         if (typeof options.locale === 'object') {
 
             if (typeof options.locale.direction === 'string')
@@ -466,7 +466,8 @@
 
         constructor: DateRangePicker,
 
-        setStartDate: function(startDate) {
+        setStartDate: function (startDate) {
+            debugger;
             if (typeof startDate === 'string')
                 this.startDate = moment(startDate, this.locale.format);
 

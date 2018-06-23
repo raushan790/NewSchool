@@ -21,3 +21,14 @@ function fValidateDelete() {
 function fredirect() {
     window.location = "../TitleSetting.aspx";
 }
+function Priority_Constraint(e) {
+    var varKey;
+    if (window.event)
+        varKey = window.event.keyCode;
+    else
+        varKey = e.which;
+    if (varKey >= 48 && varKey <= 57 || varKey == 8 || varKey == 127 || varKey == 0)
+        return true;
+    else
+        return false;
+}

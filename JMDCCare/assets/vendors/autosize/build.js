@@ -37,10 +37,10 @@ function lint(full) {
 
 	if (jshint.errors.length) {
 		jshint.errors.forEach(function (err) {
-			console.log(err.line+':'+err.character+' '+err.reason);
+			//console.log.log(err.line+':'+err.character+' '+err.reason);
 		});
 	} else {
-		console.log('linted')
+		//console.log.log('linted')
 	}
 
 	return true;
@@ -61,7 +61,7 @@ function build(code) {
 	fs.writeFile('dist/'+pkg.config.filename+'.min.js', header+minified);
 	writeBower();
 	
-	console.log('dist built');
+	//console.log.log('dist built');
 }
 
 function transform(filepath) {
@@ -81,7 +81,7 @@ gaze('src/'+pkg.config.filename+'.js', function(err, watcher){
 		transform(filepath);
 	});
 
-	console.log('watching');
+	//console.log.log('watching');
 });
 
 transform('src/'+pkg.config.filename+'.js');

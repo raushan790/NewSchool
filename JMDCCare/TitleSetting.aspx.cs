@@ -15,8 +15,16 @@ public partial class TitleSetting : System.Web.UI.Page
 {
     Dbutility objDbutility = new Dbutility();
     protected static string strType;
+    protected static string strHideID = "$('td:nth-child(1),th:nth-child(1)').hide();";
+
     protected void Page_Load(object sender, EventArgs e)
     {
+        // ClientScript.RegisterStartupScript(this.GetType(), "disScript", "<script language='javascript'>" + strHideID + "</script>");
+        Session["UID"] = 1;
+        if (!IsPostBack)
+        {
+            txtTitle.Attributes.Add("AutoComplete", "off");
+        }
         Session["Type"] = "1";
         if ((Session["Type"] == null) || (Session["Type"].ToString() == "1"))
         {
@@ -26,9 +34,9 @@ public partial class TitleSetting : System.Web.UI.Page
         {
             strType = "rtl";
         }
-        BindTitle();
+        BindData();
     }
-    protected void BindTitle()
+    protected void BindData()
     {
         PlaceHolder1.Controls.Clear();
         //Populating a DataTable from database.
@@ -37,25 +45,47 @@ public partial class TitleSetting : System.Web.UI.Page
         StringBuilder html = new StringBuilder();
         //Table start.
         html.Append("<table id=\"tableId\" class=\"table table - striped jambo_table bulk_action\">");
-        //Building the Header row.
+        //Building the Header row. style="display: none;"
         html.Append("  <thead>  <tr class=\"headings\">");
+        int ColCount = 0;
         foreach (DataColumn column in dt.Columns)
         {
-            html.Append("<th class=\"column - title\">");
-            html.Append(column.ColumnName);
-            html.Append("</th>");
+            if (ColCount == 0)
+            {
+                html.Append("<th class=\"column - title\" style=\"display: none; \">");
+                html.Append(column.ColumnName);
+                html.Append("</th>");
+            }
+            else
+            {
+                html.Append("<th class=\"column - title\">");
+                html.Append(column.ColumnName);
+                html.Append("</th>");
+            }
+            ColCount = ColCount + 1;
         }
         html.Append("  </thead>  </tr>");
-
+        ColCount = 0;
         //Building the Data rows.
         foreach (DataRow row in dt.Rows)
         {
+            ColCount = 0;
             html.Append("<tr class=\"even pointer\">");
             foreach (DataColumn column in dt.Columns)
             {
-                html.Append("<td class=\" \">");
-                html.Append(row[column.ColumnName]);
-                html.Append("</td>");
+                if (ColCount == 0)
+                {
+                    html.Append("<td class=\" \" style=\"display: none; \" >");
+                    html.Append(row[column.ColumnName]);
+                    html.Append("</td>");
+                }
+                else
+                {
+                    html.Append("<td class=\" \">");
+                    html.Append(row[column.ColumnName]);
+                    html.Append("</td>");
+                }
+                ColCount = ColCount + 1;
             }
             html.Append("  </tr>");
         }
@@ -66,146 +96,96 @@ public partial class TitleSetting : System.Web.UI.Page
     }
     private DataTable GetData()
     {
-        DataTable dt=objDbutility.BindDataTable("SELECT TitleName FROM TitleSetting  WHERE TitleID<>0 ORDER BY TitleName");
+        DataTable dt = objDbutility.BindDataTable("SELECT TitleID, TitleName [Country Name] FROM TitleSetting  WHERE TitleID<>0 ORDER BY TitleName");
         return dt;
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
         {
-            TextBox t = new TextBox();
-            t.Text = txtTitleName.Value;    
-                    
-            string strResult = "";
-            //if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleID) FROM TitleSetting") == 0)
-            //{
-            //    strResult = objDbutility.ExecuteQuery("INSERT INTO TitleSetting(TitleID,TitleName) VALUES(0,'')");
-            //}
-            //if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleName) from TitleSetting WHERE UPPER(TitleName)='" + txtTitleName.Value.Trim().Replace("'", "''").ToUpper() + "'") > 0)
-            //{
-            //    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", "Title");
-            //    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-            //    txtTitleName.Focus();
-            //    return;
-            //}
-            //else if(hdnFlag.Value!="")
-            //{
-            //    strResult = objDbutility.ExecuteQuery("Update TitleSetting Set TitleName= '" + txtTitleName.Value.Trim().Replace("'","''") + "' Where TitleName='"+ hdnFlag.Value +"'");
-            //    txtTitleName.Value = "";
-            //}
-            //else
-            //{
-            //    strResult = objDbutility.ExecuteQuery("INSERT INTO TitleSetting(TitleID,TitleName,EntryUserID,EntryDate) SELECT ISNULL(Max(TitleId),0)+1,'" + txtTitleName.Value.Trim().Replace("'", "''") + "'," + Convert.ToInt32(Session["UID"]) + ",GetDate() from TitleSetting");
-            //    txtTitleName.Value = "";
-            //}
-            string[] strArray = hdnFlag.Value.Split('^');
-            if (strArray[0] == "N" || (strArray[1] == "E" && strArray[0].Trim().ToUpper() != txtTitleName.Value.Trim().ToUpper()))
+            string strResult;
+            string[] astrFlag = hdnFlag.Value.ToString().Split('^');
+            if (astrFlag[0] == "N" || astrFlag[0] == "E" && astrFlag[2].Trim().ToUpper() != txtTitle.Value.Trim().ToUpper())
             {
-                if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleName) from TitleSetting WHERE UPPER(TitleName)='" + txtTitleName.Value.Trim().Replace("'", "''").ToUpper() + "'") > 0)
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleName) FROM TitleSetting WHERE UPPER(TitleName) =" + objDbutility.fReplaceChar(txtTitle) + "") != 0)
                 {
-                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", "Title");
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-                    txtTitleName.Focus();
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblTitle.Text.Trim().Replace(" ", ""));
+                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>" + strHideID + "  alert('" + strResult + "');</script>");
                     return;
                 }
             }
-            if (strArray[0] == "N")
+            if (astrFlag[0] == "N")
             {
-                if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleID) FROM TitleSetting") == 0)
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM TitleSetting") == 0)
                 {
                     strResult = objDbutility.ExecuteQuery("INSERT INTO TitleSetting(TitleID,TitleName) VALUES(0,'')");
                 }
-                else
-                {
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO TitleSetting(TitleID,TitleName,EntryUserID,EntryDate) SELECT ISNULL(Max(TitleId),0)+1,'" + txtTitleName.Value.Trim().Replace("'", "''") + "'," + Convert.ToInt32(Session["UID"]) + ",GetDate() from TitleSetting");
-                    txtTitleName.Value = "";
-                }
+                strResult = objDbutility.ExecuteQuery("INSERT INTO TitleSetting(TitleID,TitleName,EntryUserID,EntryDate) SELECT (ISNULL(MAX(TitleID),0))+1," + objDbutility.fReplaceChar(txtTitle) + ", " +
+                                      "" + Convert.ToInt32(Session["UID"]) + ",GetDate() FROM TitleSetting");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuTitle','Title: " + (txtTitle.Value.Trim().Replace("'", "''") != "" ? txtTitle.Value.Trim().Replace("'", "''") : txtTitle.Value.Trim().Replace("'", "''")) + " ,Is Added')");
             }
             else
             {
-                strResult = objDbutility.ExecuteQuery("Update TitleSetting Set TitleName= '" + txtTitleName.Value.Trim().Replace("'", "''") + "' Where TitleName='" + strArray[0] + "'");
-                txtTitleName.Value = "";
-            }
-            BindTitle();
-            //if (strResult == "")
-            //{
-            //    if (hdnFlag.Value == "")
-            //    {
-            //        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
+                strResult = objDbutility.ExecuteQuery("UPDATE TitleSetting SET TitleName=" + objDbutility.fReplaceChar(txtTitle) + ",UpdateUserID=" + Convert.ToInt32(Session["UID"]) + ", " +
+                                      "UpdateDate=GetDate() WHERE TitleID=" + astrFlag[1] + "");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuTitle','Title: " + astrFlag[2] + " To " + (txtTitle.Value.Trim().Replace("'", "''") != "" ? txtTitle.Value.Trim().Replace("'", "''") : txtTitle.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
 
-            //    }
-            //    else
-            //    {
-            //        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
-            //    }
-            //    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "');</script>");
-            //}
-            //else
-            //{
-            //    ClientScript.RegisterStartupScript(this.GetType(), "DisplayScript", "<script>alert('" + strResult + "')</script>");
-            //}
+            }
+            BindData();
+            txtTitle.Value = "";
+            hdnFlag.Value = "";
             if (strResult == "")
             {
-                if (strArray[0] == "N")
+                if (astrFlag[0] == "N")
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
-
                 }
                 else
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
                 }
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "');</script>");
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "DisplayScript", "<script>alert('" + strResult + "')</script>");
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
-            hdnFlag.Value = "";
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "DisplayScript", "<script>alert('" + ex.Message + "')</script>");
+            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
         }
     }
     protected void btnDelete_Click(object sender, EventArgs e)
     {
         try
         {
-            string strResult = "";
-            if (objDbutility.ReturnNumericValue("EXEC GetDataused 'TitleID','TitleSetting','" + hdnFlag.Value.Split('^')[0] + "'") > 0)
+            string strResult;
+            string[] astrFlag = hdnFlag.Value.ToString().Split('^');
+            if (objDbutility.ReturnNumericValue("EXEC GetDataused 'TitleID','TitleSetting','" + astrFlag[0] + "'") > 0)
             {
                 strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "4", "");
                 ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
+                return;
+            }
+            strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuCountry','Country: " + (txtTitle.Value.Trim().Replace("'", "''") != "" ? txtTitle.Value.Trim().Replace("'", "''") : txtTitle.Value.Trim().Replace("'", "''")) + " ,Is Deleted')");
+            strResult = objDbutility.ExecuteQuery("DELETE FROM TitleSetting WHERE TitleID= " + astrFlag[0] + "");
+            BindData();
+            txtTitle.Value = "";
+            hdnFlag.Value = "";
+            if (strResult == "")
+            {
+                strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
             else
             {
-                if (hdnFlag.Value != "")
-                {
-                    strResult = objDbutility.ExecuteQuery("DELETE FROM TitleSetting WHERE UPPER(TitleName)='" + hdnFlag.Value.Split('^')[0].ToUpper() + "'");
-                    if (strResult == "")
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                    }
-                    else
-                    {
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                    }
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('Please select title to delete.')</script>");
-                }
-
-                BindTitle();
-                hdnFlag.Value = "";
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + ex.Message + "')</script>");
+            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
         }
-
     }
 }
