@@ -51,9 +51,9 @@
                                     </div>
                                 </div>
 
-                            <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name">Academic Session	
+                            <label class="control-label col-md-4 col-sm-4 col-xs-12" for="first-name">Session Start/End
                                     <span class="required">*</span>
-                                    </label>
+                            </label>
                                      <div class="col-md-4 col-sm-4 col-xs-12 form-group  has-feedback">
                                         <div class="control-group">
                                             <div class="controls">
@@ -65,7 +65,7 @@
                                             </div>
                                         </div>
                                       </div>
-                                         <div class="col-md-4 col-sm-4 col-xs-12 form-group  has-feedback">
+                                     <div class="col-md-4 col-sm-4 col-xs-12 form-group  has-feedback">
                                         <div class="control-group">
                                             <div class="controls">
                                                 <div class="col-md-6 xdisplay_inputx form-group has-feedback">

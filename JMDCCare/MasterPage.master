@@ -4,32 +4,20 @@
 <html lang="en">
 <head>
     <link rel="shortcut icon" href="../assets/images/favicon.ico"  type="image/x-icon">
-    <title>JMD ERP Solutions</title>
-    <!-- Bootstrap -->
+    <title>JMD EDUhub :: ERP Solutions</title>
     <link href="assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
     <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
     <link href="assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-
-    <!-- bootstrap-progressbar -->
     <link href="assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- JQVMap -->
     <link href="assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
-    <!-- bootstrap-daterangepicker -->
     <link href="assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
     <asp:ContentPlaceHolder ID="head" runat="server" />
-
-    <!-- Custom Theme Style -->
     <link href="assets/build/css/custom.css" rel="stylesheet">
-
 </head>
 
 <body class="nav-md">
-    <form id="form1" runat="server">
+    <form id="frmMaster" runat="server">
 
         <div class="container body">
             <div class="main_container">
@@ -62,104 +50,31 @@
                                 <ul class="nav side-menu">                               
                                     <li><a><i class="fa fa-cog"></i>Standard Codes<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="AcademicSession.aspx">Academic Session </a></li>
+                                            <li><a href='<%=ResolveUrl("~/AcademicSession") %>'>Academic Session </a></li>
                                             <li><a href="BoardSetting.aspx">Board</a></li>
                                             <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>
                                             <li><a href="BloodGroupSetting.aspx">Blood Group</a></li>
                                             <li><a href="ClassSetting.aspx">Class</a></li>
                                             <li><a href="CountrySetting.aspx">Country</a></li>
+                                            <li><a href="HouseSetting.aspx">House</a></li>
+                                            <li><a href="MaritalStatusSetting.aspx">Marital Status</a></li>
                                             <li><a href="MotherTongueSetting.aspx">Mother Tongue</a></li>
-                                            <li><a href="NationalitySetting.aspx">Nationality</a></li>    
-                                            
-                                             <li><a href="ReligionSetting.aspx">Religion</a></li>  
-                                            <li><a href="SectionSetting.aspx">Section</a></li>                                            
+                                            <li><a href="NationalitySetting.aspx">Nationality</a></li>  
+                                            <li><a href="ReligionSetting.aspx">Religion</a></li>  
+                                            <li><a href="SectionSetting.aspx">Section</a></li>  
+                                            <li><a href="StateSetting.aspx">State</a></li>  
+                                            <li><a href="CategorySetting.aspx">Social Category</a></li>
                                             <li><a href="TitleSetting.aspx">Title</a></li>
                                             
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-home"></i>Home <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-home"></i>Student <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/">Dashboard</a></li>
-                                            <li><a href="Default2.aspx">Dashboard2</a></li>
+                                            <li><a href="../Student.aspx">Student</a></li>
+                                            <li><a href="../Default2.aspx">StudentNew</a></li>
                                             <li><a href="Default3.aspx">Dashboard3</a></li>
                                         </ul>
                                     </li>
-                                    <li><a><i class="fa fa-cog"></i>UI Elements <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="general_elements.aspx">General Elements</a></li>
-                                            <li><a href="media_gallery.aspx">Media Gallery</a></li>
-                                            <li><a href="typography.aspx">Typography</a></li>
-                                            <li><a href="icons.aspx">Icons</a></li>
-                                            <li><a href="glyphicons.aspx">Glyphicons</a></li>
-                                            <li><a href="widgets.aspx">Widgets</a></li>
-                                            <li><a href="invoice.aspx">Invoice</a></li>
-                                            <li><a href="inbox.aspx">Inbox</a></li>
-                                            <li><a href="calendar.aspx">Calendar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-table"></i>Tables <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="tables.aspx">Tables</a></li>
-                                            <li><a href="tables_dynamic.aspx">Table Dynamic</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-bar-chart-o"></i>Data Presentation <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="chartjs.aspx">Chart JS</a></li>
-                                            <li><a href="chartjs2.aspx">Chart JS2</a></li>
-                                            <li><a href="morisjs.aspx">Moris JS</a></li>
-                                            <li><a href="echarts.aspx">ECharts</a></li>
-                                            <li><a href="other_charts.aspx">Other Charts</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="fixed_sidebar.aspx">Fixed Sidebar</a></li>
-                                            <li><a href="fixed_footer.aspx">Fixed Footer</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="menu_section">
-                                <h3>Live On</h3>
-                                <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-bug"></i>Additional Pages <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="e_commerce.aspx">E-commerce</a></li>
-                                            <li><a href="projects.aspx">Projects</a></li>
-                                            <li><a href="project_detail.aspx">Project Detail</a></li>
-                                            <li><a href="contacts.aspx">Contacts</a></li>
-                                            <li><a href="profile.aspx">Profile</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-windows"></i>Extras <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="page_403.aspx">403 Error</a></li>
-                                            <li><a href="page_404.aspx">404 Error</a></li>
-                                            <li><a href="page_500.aspx">500 Error</a></li>
-                                            <li><a href="plain_page.aspx">Plain Page</a></li>
-                                            <li><a href="login.aspx">Login Page</a></li>
-                                            <li><a href="pricing_tables.aspx">Pricing Tables</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-sitemap"></i>Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="#level1_1">Level One</a>
-                                            <li><a>Level One<span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <li class="sub_menu"><a href="level2.aspx">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_1">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_2">Level Two</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#level1_2">Level One</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i>Landing Page <span class="label label-success pull-left">Coming Soon</span></a></li>
                                 </ul>
                             </div>
 

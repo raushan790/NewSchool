@@ -1730,13 +1730,19 @@ if (typeof NProgress != 'undefined') {
 		   
 			$('#single_cal1').daterangepicker({
 			  singleDatePicker: true,
-			  singleClasses: "picker_1"
+                singleClasses: "picker_1",
+               locale: {
+                    format: 'DD/MM/YYYY'
+                }// By roska for date format
 			}, function(start, end, label) {
 			  //console.log(start.toISOString(), end.toISOString(), label);
 			});
 			$('#single_cal2').daterangepicker({
 			  singleDatePicker: true,
-			  singleClasses: "picker_2"
+                singleClasses: "picker_2",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }// By roska for date format
 			}, function(start, end, label) {
 			  //console.log(start.toISOString(), end.toISOString(), label);
 			});
@@ -1749,10 +1755,29 @@ if (typeof NProgress != 'undefined') {
 			}
 			}, function(start, end, label) {
 			  //console.log(start.toISOString(), end.toISOString(), label);
-			});
-			$('#single_cal4').daterangepicker({
+                });
+
+            $('#single_cal4').daterangepicker({
+                singleDatePicker: true,
+                singleClasses: "picker_4",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            }, function (start, end, label) {
+                //console.log(start.toISOString(), end.toISOString(), label);
+                });
+            $('#single_cal5').daterangepicker({
+                singleDatePicker: true,
+                singleClasses: "picker_5",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            }, function (start, end, label) {
+                //console.log(start.toISOString(), end.toISOString(), label);
+            });
+			$('#single_cal6').daterangepicker({
 			  singleDatePicker: true,
-			  singleClasses: "picker_4",
+			  singleClasses: "picker_6",
 			  locale: {
 			      format: 'DD/MM/YYYY'
 			  }

@@ -122,7 +122,7 @@ public partial class BloodGroupSetting : System.Web.UI.Page
                 {
                     if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BloodGroupSetting") == 0)
                     {
-                        strResult = objDbutility.ExecuteQuery("INSERT INTO BloodGroupSetting(BloodGroupID,BloodGroupName,PriorityNo) VALUES (0,'',0)");
+                        strResult = objDbutility.ExecuteQuery("INSERT INTO BloodGroupSetting(BloodGroupID,BloodGroupName) VALUES (0,'')");
                     }
                     strResult = objDbutility.ExecuteQuery("INSERT INTO BloodGroupSetting(BloodGroupID,BloodGroupName,EntryUserID,EntryDate) SELECT ISNULL(Max(BloodGroupID),0)+1," +
                         " " + objDbutility.fReplaceChar(txtBloodGroup) + ",'" + Convert.ToInt32(Session["UID"]) + "',GetDate() FROM BloodGroupSetting");

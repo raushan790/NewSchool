@@ -116,7 +116,7 @@ public partial class BoardingCategorySetting : System.Web.UI.Page
                 {
                     if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting") == 0)
                     {
-                        strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName,PriorityNo) VALUES (0,'',0)");
+                        strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName) VALUES (0,'')");
                     }
                     strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName,EntryUserID,EntryDate) SELECT ISNULL(Max(BoardingCategoryID),0)+1," +
                         " " + objDbutility.fReplaceChar(txtBoardingCategory) + ",'" + Convert.ToInt32(Session["UID"]) + "',GetDate() FROM BoardingCategorySetting");

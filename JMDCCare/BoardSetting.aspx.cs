@@ -15,13 +15,12 @@ public partial class BoardSetting : System.Web.UI.Page
 {
     Dbutility objDbutility = new Dbutility();
     protected static string strType;
+    protected static string strHideID = "$('td:nth-child(1),th:nth-child(1)').hide();";
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack) // If page loads for first time 
-        {
-            Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString()); // Assign the Session["update"] with unique value
-        }
+        // ClientScript.RegisterStartupScript(this.GetType(), "disScript", "<script language='javascript'>" + strHideID + "</script>");
+        Session["UID"] = 1;
         if (!IsPostBack)
         {
             txtBoard.Attributes.Add("AutoComplete", "off");
@@ -37,10 +36,6 @@ public partial class BoardSetting : System.Web.UI.Page
         }
         BindData();
     }
-    protected override void OnPreRender(EventArgs e)
-    {
-        ViewState["update"] = Session["update"];
-    }
     protected void BindData()
     {
         PlaceHolder1.Controls.Clear();
@@ -50,25 +45,47 @@ public partial class BoardSetting : System.Web.UI.Page
         StringBuilder html = new StringBuilder();
         //Table start.
         html.Append("<table id=\"tableId\" class=\"table table - striped jambo_table bulk_action\">");
-        //Building the Header row.
+        //Building the Header row. style="display: none;"
         html.Append("  <thead>  <tr class=\"headings\">");
+        int ColCount = 0;
         foreach (DataColumn column in dt.Columns)
         {
-            html.Append("<th class=\"column - title\">");
-            html.Append(column.ColumnName);
-            html.Append("</th>");
+            if (ColCount == 0)
+            {
+                html.Append("<th class=\"column - title\" style=\"display: none; \">");
+                html.Append(column.ColumnName);
+                html.Append("</th>");
+            }
+            else
+            {
+                html.Append("<th class=\"column - title\">");
+                html.Append(column.ColumnName);
+                html.Append("</th>");
+            }
+            ColCount = ColCount + 1;
         }
         html.Append("  </thead>  </tr>");
-
+        ColCount = 0;
         //Building the Data rows.
         foreach (DataRow row in dt.Rows)
         {
+            ColCount = 0;
             html.Append("<tr class=\"even pointer\">");
             foreach (DataColumn column in dt.Columns)
             {
-                html.Append("<td class=\" \">");
-                html.Append(row[column.ColumnName]);
-                html.Append("</td>");
+                if (ColCount == 0)
+                {
+                    html.Append("<td class=\" \" style=\"display: none; \" >");
+                    html.Append(row[column.ColumnName]);
+                    html.Append("</td>");
+                }
+                else
+                {
+                    html.Append("<td class=\" \">");
+                    html.Append(row[column.ColumnName]);
+                    html.Append("</td>");
+                }
+                ColCount = ColCount + 1;
             }
             html.Append("  </tr>");
         }
@@ -79,122 +96,99 @@ public partial class BoardSetting : System.Web.UI.Page
     }
     private DataTable GetData()
     {
-        DataTable dt = objDbutility.BindDataTable("SELECT BoardName [Board Name] FROM BoardSetting  WHERE BoardID<>0 ORDER BY BoardName");
+        DataTable dt = objDbutility.BindDataTable("SELECT BoardID, BoardName [Board Name] FROM BoardSetting  WHERE BoardID<>0 ORDER BY BoardName");
         return dt;
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        if (Session["update"].ToString() == ViewState["update"].ToString()) // If page not Refreshed 
+        try
         {
-            try
+            string strResult;
+            string[] astrFlag = hdnFlag.Value.ToString().Split('^');
+            if (astrFlag[0] == "N" || astrFlag[0] == "E" && astrFlag[2].Trim().ToUpper() != txtBoard.Value.Trim().ToUpper())
             {
-                string strResult;
-                string[] strArray = hdnFlag.Value.Split('^');
-
-                if (strArray[0] == "N")
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(BoardName) FROM BoardSetting WHERE UPPER(BoardName) =" + objDbutility.fReplaceChar(txtBoard) + "") != 0)
                 {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardSetting WHERE UPPER(BoardName)=" + objDbutility.fReplaceChar(txtBoard) + "") > 0)
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardName.InnerText.Trim().Replace("' '", ""));
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-                        txtBoard.Focus();
-                        return;
-                    }
-
-                }
-                if (strArray[0] == "E" && strArray[1].Trim().ToUpper() != txtBoard.Value.Trim().ToUpper())
-                {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardSetting WHERE UPPER(BoardName)=" + objDbutility.fReplaceChar(txtBoard) + "") > 0)
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardName.InnerText.Trim().Replace("' '", ""));
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-                        txtBoard.Focus();
-                        return;
-                    }
-                }
-                if (strArray[0] == "N")
-                {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardSetting") == 0)
-                    {
-                        strResult = objDbutility.ExecuteQuery("INSERT INTO BoardSetting(BoardID,BoardName,PriorityNo) VALUES (0,'',0)");
-                    }
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO BoardSetting(BoardID,BoardName,EntryUserID,EntryDate) SELECT ISNULL(Max(BoardID),0)+1," +
-                        " " + objDbutility.fReplaceChar(txtBoard) + ",'" + Convert.ToInt32(Session["UID"]) + "',GetDate() FROM BoardSetting");
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + "  ,Is Added')");
-                }
-                else
-                {
-                    strResult = objDbutility.ExecuteQuery("UPDATE BoardSetting SET BoardName=" + objDbutility.fReplaceChar(txtBoard) + ",UpdateUserID='" + Convert.ToInt32(Session["UID"]) + "',UpdateDate=GetDate() WHERE BoardName='" + strArray[1] + "'");
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + strArray[1].Trim().ToUpper() + " To " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
-                }
-                BindData();
-                clear();
-                if (strResult == "")
-                {
-                    if (strArray[0] == "N")
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
-                    }
-                    else
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
-                    }
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoard.Text.Trim().Split('<')[0]);
+                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>" + strHideID + "  alert('" + strResult + "');</script>");
+                    return;
                 }
             }
-            catch (Exception ex)
+            if (astrFlag[0] == "N")
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardSetting") == 0)
+                {
+                    strResult = objDbutility.ExecuteQuery("INSERT INTO BoardSetting(BoardID,BoardName) VALUES(0,'')");
+                }
+                strResult = objDbutility.ExecuteQuery("INSERT INTO BoardSetting(BoardID,BoardName,EntryUserID,EntryDate) SELECT (ISNULL(MAX(BoardID),0))+1," + objDbutility.fReplaceChar(txtBoard) + ", " +
+                                      "" + Convert.ToInt32(Session["UID"]) + ",GetDate() FROM BoardSetting");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuBoard','Board Name: " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Added')");
+
+            }
+            else
+            {
+                strResult = objDbutility.ExecuteQuery("UPDATE BoardSetting SET BoardName=" + objDbutility.fReplaceChar(txtBoard) + ",UpdateUserID=" + Convert.ToInt32(Session["UID"]) + ", " +
+                                      "UpdateDate=GetDate() WHERE BoardID=" + astrFlag[1] + "");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuBoard','Board Name: " + astrFlag[2] + " To " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
+
+            }
+            BindData();
+            txtBoard.Value = "";
+            hdnFlag.Value = "";
+            if (strResult == "")
+            {
+                if (astrFlag[0] == "N")
+                {
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
+                }
+                else
+                {
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
+                }
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "'); window.location.replace('BoardSetting.aspx');</script>");
+            }
+            else
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
         }
-    }
-    protected void clear()
-    {
-        txtBoard.Value = "";
-        hdnFlag.Value = "";
+        catch (Exception ex)
+        {
+            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
+        }
     }
     protected void btnDelete_Click(object sender, EventArgs e)
     {
         try
         {
-            string strResult = "";
-            if (objDbutility.ReturnNumericValue("EXEC GetDataused 'BoardID','BoardSetting','" + hdnFlag.Value.Split('^')[0] + "'") > 0)
+            string strResult;
+            string[] astrFlag = hdnFlag.Value.ToString().Split('^');
+            if (objDbutility.ReturnNumericValue("EXEC GetDataused 'BoardID','BoardSetting','" + astrFlag[0] + "'") > 0)
             {
                 strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "4", "");
                 ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
+                hdnFlag.Value = "";
+                txtBoard.Value = "";
+                return;
+            }
+            strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuCountry','Board Name: " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Deleted')");
+            strResult = objDbutility.ExecuteQuery("DELETE FROM BoardSetting WHERE BoardID= " + astrFlag[0] + "");
+            BindData();
+            txtBoard.Value = "";
+            hdnFlag.Value = "";
+            if (strResult == "")
+            {
+                strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
             else
             {
-                if (hdnFlag.Value != "")
-                {
-                    strResult = objDbutility.ExecuteQuery("DELETE FROM BoardSetting WHERE UPPER(BoardName)='" + hdnFlag.Value.Split('^')[0].ToUpper() + "'");
-                    if (strResult == "")
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                    }
-                    else
-                    {
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                    }
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('Please select title to delete.')</script>");
-                }
-
-                BindData();
-                hdnFlag.Value = "";
+                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + ex.Message + "')</script>");
+            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
         }
-
     }
 }

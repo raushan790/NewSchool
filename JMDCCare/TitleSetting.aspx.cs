@@ -109,7 +109,7 @@ public partial class TitleSetting : System.Web.UI.Page
             {
                 if (objDbutility.ReturnNumericValue("SELECT COUNT(TitleName) FROM TitleSetting WHERE UPPER(TitleName) =" + objDbutility.fReplaceChar(txtTitle) + "") != 0)
                 {
-                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblTitle.Text.Trim().Replace(" ", ""));
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblTitle.Text.Trim().Split('<')[0]);
                     ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>" + strHideID + "  alert('" + strResult + "');</script>");
                     return;
                 }

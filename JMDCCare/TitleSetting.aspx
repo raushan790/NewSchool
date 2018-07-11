@@ -34,11 +34,8 @@
                             <div id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
                                 <div class="form-group">
-                                  <%--  <label id="lblTitle" runat="server" class="control-label col-md-3 col-sm-3 col-xs-12" for="Class-name">
-                                        Country <span class="required">*</span>
-                                    </label>--%>
                                     <asp:Label id="lblTitle" runat="server" class="control-label col-md-3 col-sm-3 col-xs-12" for="Class-name">
-                                          Section <span class="required">*</span>
+                                          Title <span class="required">*</span>
                                     </asp:Label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" maxlength="50" runat="server" id="txtTitle" required="required" class="form-control col-md-7 col-xs-12">
@@ -150,6 +147,14 @@
                 $('#<%=btnSave.ClientID%>').attr('disabled', true);
                 $('#<%=btnDelete.ClientID%>').attr('disabled', true);
                 $('#<%=txtTitle.ClientID%>').prop("disabled", true);
+            }
+            else if (hdnFlagValue.split('^')[0] == "E") {
+                $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', false);
+                $('#<%=btnDelete.ClientID%>').attr('disabled', false);
+                $('#<%=txtTitle.ClientID%>').prop("disabled", false);
+                $('#<%=txtTitle.ClientID%>').focus();
             }
             else {
                 $('#<%=btnEdit.ClientID%>').attr('disabled', true);
