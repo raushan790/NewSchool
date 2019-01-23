@@ -8,10 +8,8 @@
     
     static void RegisterRoutes(RouteCollection routes)
     {
-        routes.MapPageRoute("AcademicSession", "AcademicSession", "~/AcademicSession.aspx");
-        routes.MapPageRoute("Board", "Board", "~/BoardSetting.aspx");
-        routes.MapPageRoute("BoardingCategory", "BoardingCategory", "~/BoardingCategorySetting.aspx");
-        routes.MapPageRoute("City", "City", "~/CitySetting.aspx");
+        routes.MapPageRoute("Credit", "Credit", "~/Credit.aspx");
+        routes.MapPageRoute("Debit", "Debit", "~/Debit.aspx");
         routes.MapPageRoute("StudentDetails", "StudentDetails", "~/Student.aspx");
         routes.MapPageRoute("AddCustomer", "AddCustomer", "~/NewCustomer.aspx");
     }

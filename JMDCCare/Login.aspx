@@ -76,7 +76,7 @@
 <body>
     <form id="frmLogin" runat="server">
         <div class="main">
-                                 <div class="messagealert" id="alert_container">
+            <div class="messagealert" id="alert_container">
             </div>
                 <section class="signin">
                     <!-- <img src="images/signup-bg.jpg" alt=""> -->

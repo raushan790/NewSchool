@@ -48,27 +48,10 @@
                                 <h3>General</h3>
                                 <ul class="nav side-menu">     
                                     <li><a href='<%=ResolveUrl("~/AddCustomer") %>'>Create New Customer</a></li>
-                                    <li><a><i class="fa fa-cog"></i>Standard Codes<span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-cog"></i>Transaction Entry<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href='<%=ResolveUrl("~/AcademicSession") %>'>Academic Session </a></li>
-                                            <li><a href='<%=ResolveUrl("~/Board") %>'>Board</a></li>
-                                            <li><a href='<%=ResolveUrl("~/BoardingCategory") %>'>Boarding Category</a></li>
-<%--                                            <li><a href="BoardSetting.aspx">Board</a></li>
-                                            <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>--%>
-                                            <li><a href="BloodGroupSetting.aspx">Blood Group</a></li>
-                                            <li><a href="ClassSetting.aspx">Class</a></li>
-                                            <li><a href='<%=ResolveUrl("~/City") %>'>City</a></li>
-                                            <li><a href="CountrySetting.aspx">Country</a></li>
-                                            <li><a href="HouseSetting.aspx">House</a></li>
-                                            <li><a href="MaritalStatusSetting.aspx">Marital Status</a></li>
-                                            <li><a href="MotherTongueSetting.aspx">Mother Tongue</a></li>
-                                            <li><a href="NationalitySetting.aspx">Nationality</a></li>  
-                                            <li><a href="ReligionSetting.aspx">Religion</a></li>  
-                                            <li><a href="SectionSetting.aspx">Section</a></li>  
-                                            <li><a href="StateSetting.aspx">State</a></li>  
-                                            <li><a href="CategorySetting.aspx">Social Category</a></li>
-                                            <li><a href="TitleSetting.aspx">Title</a></li>
-                                            
+                                            <li><a href='<%=ResolveUrl("~/Credit") %>'>Credit To Customer Account</a></li>
+                                            <li><a href='<%=ResolveUrl("~/Debit") %>'>Debit From Customer Account</a></li>
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-home"></i>Student <span class="fa fa-chevron-down"></span></a>

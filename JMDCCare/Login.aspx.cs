@@ -66,6 +66,7 @@ public partial class Login : System.Web.UI.Page
         }
         return chkValue;
     }
+
     protected void btnSignup_Click(object sender, EventArgs e)
     {
         if (ValidateMobileNo())
@@ -79,6 +80,6 @@ public partial class Login : System.Web.UI.Page
             return;
         }
         Session["Text"] = "Raushan";
-        Response.Redirect("HomePage.aspx");
+        Response.Redirect(ResolveUrl("~/AddCustomer"));
     }
 }
