@@ -8,6 +8,26 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="Server">
     <!-- page content -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                       <div class="modal-header">
+                            <ul class="nav navbar-right panel_toolbox" style="min-width:23px !important;">
+                                <li><a class="foo bar" rel="nameClose" href = '<%=ResolveUrl("~/BoardingCategory") %>'><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                <div class="modal-body">
+                    <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+               </div>
+                <div class="modal-footer">
+                    <button id="btnpopupCose" type="button" class="btn btn-default" data-dismiss="modal">
+                        Close</button>
+               </div>
+            </div>
+        </div>
+       </div>
     <div class="right_col" role="main">
         <div class="">
             <div class="page-title">
@@ -43,7 +63,7 @@
                                 </div>
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3"> 
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4"> 
                                         <asp:Button id="btnNew" type="submit" runat="server" OnClientClick="return fNew()"  class="btn btn-primary" Text="New" />
                                         <asp:Button id="btnEdit" type="button" runat="server" OnClientClick="return fEdit()"  class="btn btn-primary" Text="Edit" />
                                         <asp:Button id="btnDelete" type="submit" runat="server" OnClientClick="return fValidateDelete()"  OnClick="btnDelete_Click" class="btn btn-primary" Text="Delete" />
@@ -59,20 +79,9 @@
                 </div>
             </div>
 
-            <div class="clearfix"></div>
-
+            <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
-                        <div class="x_title">
-                            <ul class="nav navbar-right panel_toolbox">
-                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                </li>
-                                <li><a class="foo bar" rel="lnkCloseCmd"><i class="fa fa-close"></i></a>
-                                </li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-
                         <div class="x_content">
                             <div class="table-responsive">
                                 <asp:PlaceHolder ID = "PlaceHolder1" runat="server" />
@@ -80,6 +89,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
     <!-- /page content -->
@@ -105,8 +115,15 @@
     <!-- starrr -->
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
     <script type="text/javascript">
-        function addRowHandlers() {
-           
+        $("#btnpopupCose").click(function () {
+            window.location.href = '<%=ResolveUrl("~/BoardingCategory") %>';
+        });
+
+        function ShowPopup() {
+            debugger;
+            $("#myModal").modal('show');            
+        }
+    function addRowHandlers() {           
     var table = document.getElementById("tableId");
     var rows = table.getElementsByTagName("tr");
     for (i = 0; i < rows.length; i++) {

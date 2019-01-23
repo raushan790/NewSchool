@@ -33,8 +33,8 @@ public class Dbutility
         protected static string strDatabase = System.Configuration.ConfigurationManager.AppSettings.Get("DatabaseName");
         protected static string strDatabaseUID = System.Configuration.ConfigurationManager.AppSettings.Get("UID");
         protected static string strDatabasePWD = System.Configuration.ConfigurationManager.AppSettings.Get("PWD");
-        protected static string strConnectionString = "Data Source=" + strServer + ";User ID=" + strDatabaseUID + ";PWD=" + strDatabasePWD + ";Initial Catalog=" + strDatabase + ";Max Pool Size=500;Pooling=True;Connect Timeout=0;";
-
+    protected static string strConnectionString = "Data Source=" + strServer + ";User ID=" + strDatabaseUID + ";PWD=" + strDatabasePWD + ";Initial Catalog=" + strDatabase + ";Max Pool Size=500;Pooling=True;Connect Timeout=0;";
+    //protected static string strConnectionString = "Data Source=" + strServer + ";Initial Catalog=" + strDatabase + ";Integrated Security=true;;Max Pool Size=500;Pooling=True;Connect Timeout=0;";
     public string ReturnConnectionString()
     {
         return strConnectionString;
@@ -48,7 +48,7 @@ public class Dbutility
         return strDatabasePWD;
     }
 
-    public void FillDDLs(DropDownList ddlName, string strSQl, string strValue, string strText, string strDisplay)
+    public void FillDDLs(DropDownList ddlName, string strSQl, string strValue, string strText)
     {
         SqlConnection conFillDDL = new SqlConnection();
         SqlCommand cmdFillDDL = new SqlCommand();
@@ -88,7 +88,7 @@ public class Dbutility
             conFillList.Dispose();
             GC.Collect();
         }
-        public void FillCheckedBoxList(CheckBoxList chkList, string strSQL, string strValue, string strText, string strDisplay)
+        public void FillCheckedBoxList(CheckBoxList chkList, string strSQL, string strValue, string strText)
         {
             SqlConnection conFillChk = new SqlConnection(strConnectionString);//new SqlConnection(ConfigurationManager.AppSettings.Get("Connectionstring"));
             conFillChk.Open();
@@ -815,8 +815,6 @@ public class Dbutility
         public string pDisplayMessage(string strType, string strMessage, string StrLabel)
         {
             string StrReturn = "";
-            if (strType == "1")
-            {
                 if (StrLabel == "")
                 {
                     if (strMessage == "1")
@@ -1074,161 +1072,6 @@ public class Dbutility
 
                 }
                 return StrReturn;
-            }
-            else if (strType == "2")
-            {
-                if (StrLabel == "")
-                {
-                    if (strMessage == "1")
-                    {
-                        StrReturn = "ٍشرثي ٍعؤثسسبعممغ";
-                    }
-                    if (strMessage == "2")
-                    {
-                        StrReturn = "حيشفثي ٍعؤؤثسسبعممغ";
-                    }
-                    if (strMessage == "3")
-                    {
-                        StrReturn = "ثمثفثي ٍٍعؤؤثسسبعممغ";
-                    }
-                    if (strMessage == "4")
-                    {
-                        StrReturn = "شفش ÷×÷س ÷ى ‘سث";
-                    }
-                    if (strMessage == "5")
-                    {
-                        StrReturn = "ُثىفثق }شمهي [شفث";
-                    }
-                    //For Student Drop out Details(Added by Tinu)
-                    if (strMessage == "311_1")
-                    {
-                        StrReturn = "÷ىرشمهي ٌخمم آخ";
-                    }
-                    if (strMessage == "311_2")
-                    {
-                        StrReturn = "[ثفشهمس ٌثسفخقثي ٍعؤؤثسسبعممغ";
-                    }
-                    if (strMessage == "311_3")
-                    {
-                        StrReturn = "؛مثشسث {مثشق ]ثث [شفش ]هقسف";
-                    }
-                    if (strMessage == "310_1")
-                    {
-                        StrReturn = "لإقشىسبثققثي ٍعؤؤثسسبعممغ";
-                    }
-                    //For Student Promotion
-                    if (strMessage == "309_1")
-                    {
-                        //StrReturn = "Student Already Promoted To Next Class";
-                        StrReturn = "ٍفعيثىف ِمقثشيغ ؛قخةخفثي لإخ آثءف {مشسس";
-                    }
-                    if (strMessage == "309_2")
-                    {
-                        //StrReturn = "Next Academic Year Doesnt Exists";
-                        StrReturn = "آثءف ِؤشيثةهؤ إثشق [خثسىف ُءهسفس";
-                    }
-                    //For Academic Session Master
-                    if (strMessage == "101_1")
-                    {
-                        StrReturn = "ُءهسفهىل ِؤشيثةهؤ ٍثسسهخى ×رثقمشححهىل";
-                    }
-                    if (strMessage == "101_2")
-                    {
-                        StrReturn = "{عققثىف ٍثسسهخى {شىىخف لآث [ثمثفثي";
-                    }
-                    //For Change Password
-                    if (strMessage == "128_1")
-                    {
-                        //StrReturn = "Incorrect Password";
-                        StrReturn = "÷ىؤخققثؤف ؛شسسصخقي";
-                    }
-                    //Exam Mark Entry
-                    if (strMessage == "1123_1")
-                    {
-                        //StrReturn = "Subject assignment not done !";
-                        StrReturn = "سعلاتثؤف شسسهلىةثىف ىخف يخىث"; ;
-                    }
-                    if (strMessage == "1123_2")
-                    {
-                        //StrReturn = "Permission is not given for mark entry";
-                        StrReturn = "حثقةهسسهخى ىخف لهرثى بخق ’شن ىثفقغ";
-                    }
-                    // For Generated Report Card
-                    if (strMessage == "1132_1")
-                    {
-                        //StrReturn = "Report Card Generated";
-                        StrReturn = "قثحخقف ؤشقي لثىثقفشثي";
-                    }
-                    if (strMessage == "1132_2")
-                    {
-                        //StrReturn = "Temporary Data Deleted";
-                        StrReturn = "فثةحخقشقع يشفش يثمثفثي";
-                    }
-
-                    //For User Management
-                    if (strMessage == "129_1")
-                    {
-                        StrReturn = "‘سثق آخف ]خعىي";
-                    }
-                    if (strMessage == "129_2")
-                    {
-                        //StrReturn = "Logger User Can'txtinput Delete";
-                        StrReturn = "/خللثق ‘سثق {شىطف [ثمثفث";
-                    }
-                    //For Fine Setting Details
-                    if (strMessage == "1012_1")
-                    {
-                        StrReturn = "]هىث ِمقثشيغ ِسسهلىثي";
-                    }
-                    if (strMessage == "1018_2")
-                    {
-                        StrReturn = "{شىىخف ؛عف آشقلشفهرث ِةخعىف ’خقث لإاشى ٍفقعؤفعقث ِةخعىف";
-
-                    }
-                    if (strMessage == "1018_3")
-                    {
-                        StrReturn = "]ثث حشيه ÷ٍ ’خقث لإاشى ]هءثي ِةخعىلاف";
-
-                    }
-                    //For Fee Transfer
-                    if (strMessage == "1013_1")
-                    {
-                        StrReturn = "ِمقثشيغ لإقشىسبثققثي";
-                    }
-                    if (strMessage == "1013_2")
-                    {
-                        StrReturn = "لإقشىسبثق ]ثث أثشيس ]هقسف";
-                    }
-                    if (strMessage == "1013_3")
-                    {
-                        StrReturn = "لإقشىسبثق ]ثث لأقخعح & ]ثث أثشيس ]هقسف";
-                    }
-
-                    if (strMessage == "1023")
-                    {
-                        StrReturn = "آخ ٌثؤخقي ]خعىي";
-                    }
-
-                }
-                else
-                {
-                    if (strMessage == "5")
-                    {
-                        StrReturn = StrLabel.ToString() + " ِمقثشيغ ُءهسفس";
-                    }
-                    if (strMessage == "6")
-                    {
-                        StrReturn = " ** ٍثمثؤف  " + StrLabel.ToString() + " ** ";
-                    }
-
-                    if (strMessage == "1018_1")
-                    {
-                        StrReturn = StrLabel.ToString() + "[??? ??? ?????";
-                    }
-                }
-
-            }
-            return StrReturn;
         }
 
         public void pDisplayTypeValue(int intType)
@@ -1330,7 +1173,11 @@ public class Dbutility
         {
             return "LEFT('" + txtinput.Value.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + txtinput.MaxLength + ")";
         }
-        public string fReplaceChar(string txtinput)
+    public string fReplaceChar(TextBox txtinput)
+    {
+        return "LEFT('" + txtinput.Text.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + txtinput.MaxLength + ")";
+    }
+    public string fReplaceChar(string txtinput)
         {
             return "LEFT('" + txtinput.Trim().Replace("'", "''").Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&LT;", "<").Replace("&GT;", ">").Replace("~", "").Replace("^", "") + "'," + txtinput.Length+1 + ")";
         }
@@ -1384,6 +1231,8 @@ public class Dbutility
         //BindDataTable
         public DataTable BindDataTable(string strSQL)
         {
+        try
+        {
             SqlConnection conGetData = new SqlConnection(strConnectionString);//new SqlConnection(ConfigurationManager.AppSettings.Get("Connectionstring"));
             conGetData.Open();
             SqlCommand cmdGetData = new SqlCommand(strSQL, conGetData);
@@ -1395,6 +1244,11 @@ public class Dbutility
             conGetData.Dispose();
             rdrAdptr.Dispose();
             return dt;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception (ex.Message.ToString());
+        }
 
         }
 }

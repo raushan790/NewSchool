@@ -96,13 +96,14 @@ public partial class TitleSetting : System.Web.UI.Page
     }
     private DataTable GetData()
     {
-        DataTable dt = objDbutility.BindDataTable("SELECT TitleID, TitleName [Country Name] FROM TitleSetting  WHERE TitleID<>0 ORDER BY TitleName");
+        DataTable dt = objDbutility.BindDataTable("SELECT TitleID, TitleName [Title] FROM TitleSetting  WHERE TitleID<>0 ORDER BY TitleName");
         return dt;
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
         try
         {
+            Label lblMessage = this.Master.FindControl("main").FindControl("lblMessage") as Label;
             string strResult;
             string[] astrFlag = hdnFlag.Value.ToString().Split('^');
             if (astrFlag[0] == "N" || astrFlag[0] == "E" && astrFlag[2].Trim().ToUpper() != txtTitle.Value.Trim().ToUpper())
@@ -144,11 +145,18 @@ public partial class TitleSetting : System.Web.UI.Page
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
                 }
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                //ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                //string message = "Message from server side";
+                //ClientScript.RegisterStartupScript(this.GetType(), "Popup", "ShowPopup('" + strResult + "');", true);
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                lblMessage.Text = strResult;
+                //ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
         }
         catch (Exception ex)

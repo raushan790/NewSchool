@@ -9,6 +9,23 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="Server">
     <!-- page content -->
+       <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;</button>
+               </div>
+                <div class="modal-body">
+                    <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+               </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close</button>
+               </div>
+            </div>
+        </div>
+       </div>
     <div class="right_col" role="main">
         <div class="">
             <div class="page-title">
@@ -92,6 +109,7 @@
             </div>
         </div>
     </div>
+
     <!-- /page content -->
 </asp:Content>
 
@@ -165,6 +183,11 @@
                 $('#<%=txtTitle.ClientID%>').focus();
             }
         }
+        function ShowPopup() {
+            debugger;
+            $("#myModal").modal('show');
+        }
+
         window.onload = addRowHandlers();
         $(document).ready(function () {
             $('td:nth-child(1),th:nth-child(1)').hide();

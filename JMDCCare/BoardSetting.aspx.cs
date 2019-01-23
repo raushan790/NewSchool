@@ -14,26 +14,14 @@ using System.Text;
 public partial class BoardSetting : System.Web.UI.Page
 {
     Dbutility objDbutility = new Dbutility();
-    protected static string strType;
-    protected static string strHideID = "$('td:nth-child(1),th:nth-child(1)').hide();";
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        // ClientScript.RegisterStartupScript(this.GetType(), "disScript", "<script language='javascript'>" + strHideID + "</script>");
         Session["UID"] = 1;
         if (!IsPostBack)
         {
             txtBoard.Attributes.Add("AutoComplete", "off");
         }
         Session["Type"] = "1";
-        if ((Session["Type"] == null) || (Session["Type"].ToString() == "1"))
-        {
-            strType = "ltr";
-        }
-        else
-        {
-            strType = "rtl";
-        }
         BindData();
     }
     protected void BindData()
@@ -110,7 +98,8 @@ public partial class BoardSetting : System.Web.UI.Page
                 if (objDbutility.ReturnNumericValue("SELECT COUNT(BoardName) FROM BoardSetting WHERE UPPER(BoardName) =" + objDbutility.fReplaceChar(txtBoard) + "") != 0)
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoard.Text.Trim().Split('<')[0]);
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>" + strHideID + "  alert('" + strResult + "');</script>");
+                    lblMessage.Text = strResult;
+                    ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
                     return;
                 }
             }
@@ -129,7 +118,7 @@ public partial class BoardSetting : System.Web.UI.Page
             {
                 strResult = objDbutility.ExecuteQuery("UPDATE BoardSetting SET BoardName=" + objDbutility.fReplaceChar(txtBoard) + ",UpdateUserID=" + Convert.ToInt32(Session["UID"]) + ", " +
                                       "UpdateDate=GetDate() WHERE BoardID=" + astrFlag[1] + "");
-                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuBoard','Board Name: " + astrFlag[2] + " To " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuBoard','Board Name: " + astrFlag[2].Trim().Replace("'","''") + " To " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
 
             }
             BindData();
@@ -145,16 +134,19 @@ public partial class BoardSetting : System.Web.UI.Page
                 {
                     strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
                 }
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "'); window.location.replace('BoardSetting.aspx');</script>");
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
+            lblMessage.Text = ex.Message;
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
     }
     protected void btnDelete_Click(object sender, EventArgs e)
@@ -166,9 +158,11 @@ public partial class BoardSetting : System.Web.UI.Page
             if (objDbutility.ReturnNumericValue("EXEC GetDataused 'BoardID','BoardSetting','" + astrFlag[0] + "'") > 0)
             {
                 strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "4", "");
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
                 hdnFlag.Value = "";
                 txtBoard.Value = "";
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+
                 return;
             }
             strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES(" + Session["UID"] + ",'" + Session.SessionID + "',GETDATE(),'mnuCountry','Board Name: " + (txtBoard.Value.Trim().Replace("'", "''") != "" ? txtBoard.Value.Trim().Replace("'", "''") : txtBoard.Value.Trim().Replace("'", "''")) + " ,Is Deleted')");
@@ -179,16 +173,20 @@ public partial class BoardSetting : System.Web.UI.Page
             if (strResult == "")
             {
                 strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                //ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+               // ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
             }
+            lblMessage.Text = strResult;
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
+            lblMessage.Text = ex.Message;
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
     }
 }

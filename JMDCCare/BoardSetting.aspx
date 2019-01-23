@@ -6,6 +6,26 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="Server">
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                       <div class="modal-header">
+                            <ul class="nav navbar-right panel_toolbox" style="min-width:23px !important;">
+                                <li><a class="foo bar" rel="nameClose" href = '<%=ResolveUrl("~/Board") %>'><i class="fa fa-close"></i></a>
+                                </li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                <div class="modal-body">
+                    <asp:Label ID="lblMessage" runat="server" Text=""></asp:Label>
+               </div>
+                <div class="modal-footer">
+                    <button id="btnpopupCose" type="button" class="btn btn-default" data-dismiss="modal">
+                        Close</button>
+               </div>
+            </div>
+        </div>
+       </div>
     <div class="right_col" role="main">
         <div class="">
             <div class="page-title">
@@ -41,7 +61,7 @@
                                 </div>
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-4">
                                         <asp:Button ID="btnNew" type="submit" runat="server"  class="btn btn-primary" Text="New" />
                                         <asp:Button ID="btnEdit" type="button" runat="server"  class="btn btn-primary" Text="Edit" />
                                         <asp:Button ID="btnDelete" type="submit" runat="server"  OnClick="btnDelete_Click" class="btn btn-primary" Text="Delete" />
@@ -56,36 +76,16 @@
                     </div>
                 </div>
             </div>
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
-                    <div class="x_title">
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <%--           <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Settings 1</a>
-                                        </li>
-                                        <li><a href="#">Settings 2</a>
-                                        </li>
-                                    </ul>
-                                </li>--%>
-                            <li><a class="foo bar" rel="varRedirect"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-
                     <div class="x_content">
                         <div class="table-responsive">
                             <asp:PlaceHolder ID="PlaceHolder1" runat="server" />
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -105,6 +105,15 @@
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
 
     <script type="text/javascript">
+        $("#btnpopupCose").click(function () {
+            window.location.href = '<%=ResolveUrl("~/Board") %>';
+        });
+
+        function ShowPopup() {
+            debugger;
+            $("#myModal").modal('show');            
+        }
+
         function addRowHandlers() {
             var table = document.getElementById("tableId");
             var rows = table.getElementsByTagName("tr");

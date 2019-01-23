@@ -14,32 +14,14 @@ using System.Text;
 public partial class BoardingCategorySetting : System.Web.UI.Page
 {
     Dbutility objDbutility = new Dbutility();
-    protected static string strType;
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!IsPostBack) // If page loads for first time 
-        {
-            Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString()); // Assign the Session["update"] with unique value
-        }
         if (!IsPostBack)
         {
             txtBoardingCategory.Attributes.Add("AutoComplete", "off");
         }
         Session["Type"] = "1";
-        if ((Session["Type"] == null) || (Session["Type"].ToString() == "1"))
-        {
-            strType = "ltr";
-        }
-        else
-        {
-            strType = "rtl";
-        }
         BindData();
-    }
-    protected override void OnPreRender(EventArgs e)
-    {
-        ViewState["update"] = Session["update"];
     }
     protected void BindData()
     {
@@ -84,72 +66,76 @@ public partial class BoardingCategorySetting : System.Web.UI.Page
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
-        if (Session["update"].ToString() == ViewState["update"].ToString()) // If page not Refreshed 
+        try
         {
-            try
+            string strResult;
+            string[] strArray = hdnFlag.Value.Split('^');
+
+            if (strArray[0] == "N")
             {
-                string strResult;
-                string[] strArray = hdnFlag.Value.Split('^');
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting WHERE UPPER(BoardingCategoryName)=" + objDbutility.fReplaceChar(txtBoardingCategory) + "") > 0)
+                {
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardingCategoryName.InnerText.Trim().Replace("' '", ""));
+                    //ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
+                    txtBoardingCategory.Focus();
+                    lblMessage.Text = strResult;
+                    ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                    return;
+                }
 
+            }
+            if (strArray[0] == "E" && strArray[1].Trim().ToUpper() != txtBoardingCategory.Value.Trim().ToUpper())
+            {
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting WHERE UPPER(BoardingCategoryName)=" + objDbutility.fReplaceChar(txtBoardingCategory) + "") > 0)
+                {
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardingCategoryName.InnerText.Trim().Replace("' '", ""));
+                    //ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
+                    txtBoardingCategory.Focus();
+                    lblMessage.Text = strResult;
+                    ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                    return;
+                }
+            }
+            if (strArray[0] == "N")
+            {
+                if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting") == 0)
+                {
+                    strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName) VALUES (0,'')");
+                }
+                strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName,EntryUserID,EntryDate) SELECT ISNULL(Max(BoardingCategoryID),0)+1," +
+                    " " + objDbutility.fReplaceChar(txtBoardingCategory) + ",'" + Convert.ToInt32(Session["UID"]) + "',GetDate() FROM BoardingCategorySetting");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + (txtBoardingCategory.Value.Trim().Replace("'", "''") != "" ? txtBoardingCategory.Value.Trim().Replace("'", "''") : txtBoardingCategory.Value.Trim().Replace("'", "''")) + "  ,Is Added')");
+            }
+            else
+            {
+                strResult = objDbutility.ExecuteQuery("UPDATE BoardingCategorySetting SET BoardingCategoryName=" + objDbutility.fReplaceChar(txtBoardingCategory) + ",UpdateUserID='" + Convert.ToInt32(Session["UID"]) + "',UpdateDate=GetDate() WHERE BoardingCategoryName='" + strArray[1] + "'");
+                strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + strArray[1].Trim().ToUpper() + " To " + (txtBoardingCategory.Value.Trim().Replace("'", "''") != "" ? txtBoardingCategory.Value.Trim().Replace("'", "''") : txtBoardingCategory.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
+            }
+            BindData();
+            clear();
+            if (strResult == "")
+            {
                 if (strArray[0] == "N")
                 {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting WHERE UPPER(BoardingCategoryName)=" + objDbutility.fReplaceChar(txtBoardingCategory) + "") > 0)
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardingCategoryName.InnerText.Trim().Replace("' '", ""));
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-                        txtBoardingCategory.Focus();
-                        return;
-                    }
-
-                }
-                if (strArray[0] == "E" && strArray[1].Trim().ToUpper() != txtBoardingCategory.Value.Trim().ToUpper())
-                {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting WHERE UPPER(BoardingCategoryName)=" + objDbutility.fReplaceChar(txtBoardingCategory) + "") > 0)
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "5", lblBoardingCategoryName.InnerText.Trim().Replace("' '", ""));
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
-                        txtBoardingCategory.Focus();
-                        return;
-                    }
-                }
-                if (strArray[0] == "N")
-                {
-                    if (objDbutility.ReturnNumericValue("SELECT COUNT(*) FROM BoardingCategorySetting") == 0)
-                    {
-                        strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName) VALUES (0,'')");
-                    }
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO BoardingCategorySetting(BoardingCategoryID,BoardingCategoryName,EntryUserID,EntryDate) SELECT ISNULL(Max(BoardingCategoryID),0)+1," +
-                        " " + objDbutility.fReplaceChar(txtBoardingCategory) + ",'" + Convert.ToInt32(Session["UID"]) + "',GetDate() FROM BoardingCategorySetting");
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + (txtBoardingCategory.Value.Trim().Replace("'", "''") != "" ? txtBoardingCategory.Value.Trim().Replace("'", "''") : txtBoardingCategory.Value.Trim().Replace("'", "''")) + "  ,Is Added')");
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
                 }
                 else
                 {
-                    strResult = objDbutility.ExecuteQuery("UPDATE BoardingCategorySetting SET BoardingCategoryName=" + objDbutility.fReplaceChar(txtBoardingCategory) + ",UpdateUserID='" + Convert.ToInt32(Session["UID"]) + "',UpdateDate=GetDate() WHERE BoardingCategoryName='" + strArray[1] + "'");
-                    strResult = objDbutility.ExecuteQuery("INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuClass','Class: " + strArray[1].Trim().ToUpper() + " To " + (txtBoardingCategory.Value.Trim().Replace("'", "''") != "" ? txtBoardingCategory.Value.Trim().Replace("'", "''") : txtBoardingCategory.Value.Trim().Replace("'", "''")) + " ,Is Modified')");
+                    strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
                 }
-                BindData();
-                clear();
-                if (strResult == "")
-                {
-                    if (strArray[0] == "N")
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "1", "");
-                    }
-                    else
-                    {
-                        strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "2", "");
-                    }
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                }
-                else
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
-                }
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
-            catch (Exception ex)
+            else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert('" + ex.Message.ToString().Replace("'", "") + "');</script>");
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
+        }
+        catch (Exception ex)
+        {
+            lblMessage.Text = ex.Message;
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
     }
     protected void clear()
@@ -165,7 +151,8 @@ public partial class BoardingCategorySetting : System.Web.UI.Page
             if (objDbutility.ReturnNumericValue("EXEC GetDataused 'BoardingCategoryName','BoardingCategorySetting','" + hdnFlag.Value.Split('^')[0] + "'") > 0)
             {
                 strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "4", "");
-                ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language='javascript'>alert('" + strResult + "')</script>");
+                lblMessage.Text = strResult;
+                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
             else
             {
@@ -175,16 +162,19 @@ public partial class BoardingCategorySetting : System.Web.UI.Page
                     if (strResult == "")
                     {
                         strResult = objDbutility.pDisplayMessage("" + Session["Type"].ToString() + "", "3", "");
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                        lblMessage.Text = strResult;
+                        ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + strResult + "')</script>");
+                        lblMessage.Text = strResult;
+                        ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
                     }
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('Please select title to delete.')</script>");
+                    lblMessage.Text = strResult;
+                    ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
                 }
 
                 BindData();
@@ -193,7 +183,8 @@ public partial class BoardingCategorySetting : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script language=javascript>alert('" + ex.Message + "')</script>");
+            lblMessage.Text = ex.Message;
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
 
     }

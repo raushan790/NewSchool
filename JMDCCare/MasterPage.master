@@ -51,10 +51,13 @@
                                     <li><a><i class="fa fa-cog"></i>Standard Codes<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href='<%=ResolveUrl("~/AcademicSession") %>'>Academic Session </a></li>
-                                            <li><a href="BoardSetting.aspx">Board</a></li>
-                                            <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>
+                                            <li><a href='<%=ResolveUrl("~/Board") %>'>Board</a></li>
+                                            <li><a href='<%=ResolveUrl("~/BoardingCategory") %>'>Boarding Category</a></li>
+<%--                                            <li><a href="BoardSetting.aspx">Board</a></li>
+                                            <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>--%>
                                             <li><a href="BloodGroupSetting.aspx">Blood Group</a></li>
                                             <li><a href="ClassSetting.aspx">Class</a></li>
+                                            <li><a href='<%=ResolveUrl("~/City") %>'>City</a></li>
                                             <li><a href="CountrySetting.aspx">Country</a></li>
                                             <li><a href="HouseSetting.aspx">House</a></li>
                                             <li><a href="MaritalStatusSetting.aspx">Marital Status</a></li>
@@ -70,7 +73,8 @@
                                     </li>
                                     <li><a><i class="fa fa-home"></i>Student <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="../Student.aspx">Student</a></li>
+                                            <li><a href='<%=ResolveUrl("~/StudentDetails") %>'>Student</a></li>
+<%--                                            <li><a href="../Student.aspx">Student</a></li>--%>
                                             <li><a href="../Default2.aspx">StudentNew</a></li>
                                             <li><a href="Default3.aspx">Dashboard3</a></li>
                                         </ul>
@@ -200,7 +204,9 @@
                 <!-- /top navigation -->
 
                 <!-- Main Content -->
-                <asp:ContentPlaceHolder id="main" runat="server"/>
+                <asp:ContentPlaceHolder id="main" runat="server">
+
+                </asp:ContentPlaceHolder>
                 <!-- /Main Content -->
 
                 <!-- footer content -->

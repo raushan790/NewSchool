@@ -1,0 +1,265 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="bankMaster.master.cs" Inherits="bankMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="../assets/images/favicon.ico"  type="image/x-icon">
+    <title>MI BANK </title>
+    <link href="assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <link href="assets/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <link href="assets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <link href="assets/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <link href="assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <asp:ContentPlaceHolder ID="head" runat="server" />
+    <link href="assets/build/css/custom.css" rel="stylesheet">
+</head>
+
+<body class="nav-md">
+    <form id="frmMaster" runat="server">
+
+        <div class="container body">
+            <div class="main_container">
+                <div class="col-md-3 left_col">
+                    <div class="left_col scroll-view">
+                        <div class="navbar nav_title" style="border: 0;">
+                            <a href="/" class="site_title"><i class="fa fa-anchor"></i><span>Admin</span></a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="assets/images/img.jpg" alt="..." class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>MI BANK</span>
+                                <h2></h2>
+                            </div>
+                        </div>
+                        <!-- /menu profile quick info -->
+
+                        <br />
+
+                        <!-- sidebar menu -->
+                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                            <div class="menu_section">
+                                <h3>General</h3>
+                                <ul class="nav side-menu">     
+                                    <li><a href='<%=ResolveUrl("~/AddCustomer") %>'>Create New Customer</a></li>
+                                    <li><a><i class="fa fa-cog"></i>Standard Codes<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href='<%=ResolveUrl("~/AcademicSession") %>'>Academic Session </a></li>
+                                            <li><a href='<%=ResolveUrl("~/Board") %>'>Board</a></li>
+                                            <li><a href='<%=ResolveUrl("~/BoardingCategory") %>'>Boarding Category</a></li>
+<%--                                            <li><a href="BoardSetting.aspx">Board</a></li>
+                                            <li><a href="BoardingCategorySetting.aspx">Boarding Category</a></li>--%>
+                                            <li><a href="BloodGroupSetting.aspx">Blood Group</a></li>
+                                            <li><a href="ClassSetting.aspx">Class</a></li>
+                                            <li><a href='<%=ResolveUrl("~/City") %>'>City</a></li>
+                                            <li><a href="CountrySetting.aspx">Country</a></li>
+                                            <li><a href="HouseSetting.aspx">House</a></li>
+                                            <li><a href="MaritalStatusSetting.aspx">Marital Status</a></li>
+                                            <li><a href="MotherTongueSetting.aspx">Mother Tongue</a></li>
+                                            <li><a href="NationalitySetting.aspx">Nationality</a></li>  
+                                            <li><a href="ReligionSetting.aspx">Religion</a></li>  
+                                            <li><a href="SectionSetting.aspx">Section</a></li>  
+                                            <li><a href="StateSetting.aspx">State</a></li>  
+                                            <li><a href="CategorySetting.aspx">Social Category</a></li>
+                                            <li><a href="TitleSetting.aspx">Title</a></li>
+                                            
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-home"></i>Student <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href='<%=ResolveUrl("~/StudentDetails") %>'>Student</a></li>
+<%--                                            <li><a href="../Student.aspx">Student</a></li>--%>
+                                            <li><a href="../Default2.aspx">StudentNew</a></li>
+                                            <li><a href="Default3.aspx">Dashboard3</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                        <!-- /sidebar menu -->
+
+                        <!-- /menu footer buttons -->
+                        <div class="sidebar-footer hidden-small">
+                            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                            </a>
+                            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        <!-- /menu footer buttons -->
+                    </div>
+                </div>
+
+                <!-- top navigation -->
+                <div class="top_nav">
+                    <div class="nav_menu">
+                        <nav>
+                            <div class="nav toggle">
+                                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                            </div>
+
+                            <ul class="nav navbar-nav navbar-left">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="assets/images/img.jpg" alt=""> Admin
+                   
+                                    <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                        <li><a href="javascript:;">Profile</a></li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="badge bg-red pull-left">50%</span>
+                                                <span>Settings</span>
+                                            </a>
+                                        </li>
+                                        <li><a href="javascript:;">Help</a></li>
+                                        <li><a href="login.html"><i class="fa fa-sign-out pull-left"></i>Log Out</a></li>
+                                    </ul>
+                                </li>
+
+                     <%--           <li role="presentation" class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>
+                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <img src="assets/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <img src="assets/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <img src="assets/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a>
+                                                <span class="image">
+                                                    <img src="assets/images/img.jpg" alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <i class="fa fa-angle-left"></i>
+                                                    <strong>See All Alerts</strong>
+
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>--%>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- /top navigation -->
+
+                <!-- Main Content -->
+                <asp:ContentPlaceHolder id="main" runat="server">
+
+                </asp:ContentPlaceHolder>
+                <!-- /Main Content -->
+
+                <!-- footer content -->
+              <%--  <footer>
+                    <div class="clearfix"></div>
+                </footer>--%>
+                <!-- /footer content -->
+            </div>
+        </div>
+         <!-- jQuery -->
+        <script src="assets/vendors/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- FastClick -->
+        <script src="assets/vendors/fastclick/lib/fastclick.js"></script>
+        <!-- NProgress -->
+        <script src="assets/vendors/nprogress/nprogress.js"></script>
+        <!-- Chart.js -->
+        <script src="assets/vendors/Chart.js/dist/Chart.min.js"></script>
+        <!-- gauge.js -->
+        <script src="assets/vendors/gauge.js/dist/gauge.min.js"></script>
+        <!-- bootstrap-progressbar -->
+        <script src="assets/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+        <!-- iCheck -->
+        <script src="assets/vendors/iCheck/icheck.min.js"></script>
+        <!-- Skycons -->
+        <script src="assets/vendors/skycons/skycons.js"></script>
+        <!-- Flot -->
+        <script src="assets/vendors/Flot/jquery.flot.js"></script>
+        <script src="assets/vendors/Flot/jquery.flot.pie.js"></script>
+        <script src="assets/vendors/Flot/jquery.flot.time.js"></script>
+        <script src="assets/vendors/Flot/jquery.flot.stack.js"></script>
+        <script src="assets/vendors/Flot/jquery.flot.resize.js"></script>
+        <!-- Flot plugins -->
+        <script src="assets/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+        <script src="assets/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+        <script src="assets/vendors/flot.curvedlines/curvedLines.js"></script>
+        <!-- DateJS -->
+        <script src="assets/vendors/DateJS/build/date.js"></script>
+        <!-- JQVMap -->
+        <script src="assets/vendors/jqvmap/dist/jquery.vmap.js"></script>
+        <script src="assets/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+        <script src="assets/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+        <!-- bootstrap-daterangepicker -->
+        <script src="assets/vendors/moment/min/moment.min.js"></script>
+        <script src="assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+        <asp:ContentPlaceHolder id="end" runat="server"/>
+
+        <!-- Custom Theme Scripts -->
+        <script src="assets/build/js/custom.js"></script>
+
+    </form>
+</body>
+</html>
+
