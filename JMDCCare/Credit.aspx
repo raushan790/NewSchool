@@ -176,11 +176,11 @@
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <button class="btn btn-primary" type="reset">Reset</button>
+<%--                                        <button class="btn btn-primary" type="reset" onclick ="return pClearFields('aspnetForm');">Reset</button>--%>
+                                         <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="New" OnClientClick="return pClearFields1('aspnetForm');" />
                                         <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click"/>
-                                                                                        <asp:HiddenField ID="hdnFlag" runat="server" />
-                                                                                   <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click"
-        Style="display: none;" />
+                                         <asp:HiddenField ID="hdnFlag" runat="server" />
+                                         <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
 
                                     </div>
                                 </div>
@@ -243,13 +243,8 @@
                  fredirect();
             });        
         });  
-        function fNew() {
-            $('#<%=hdnFlag.ClientID%>').val("N~");
-            //pLockControls('aspnetForm', 'U');
-            //return false;
-        }
         function fBind_Student(e) {
-            debugger;
+            //debugger;
             var varKey;
             if (window.event)
                 varKey = window.event.keyCode;
@@ -267,6 +262,23 @@
                 }
             }
         }
+   function pClearFields1(Parent) {
+    var varElements = document.getElementById(Parent).getElementsByTagName('INPUT');
+    for (var varForLoop = 0; varForLoop < varElements.length; varForLoop++) {
+        if (varElements[varForLoop].type.toLowerCase() == 'text' || varElements[varForLoop].type.toLowerCase() == 'textarea') varElements[varForLoop].value = '';
+        else if (varElements[varForLoop].type.toLowerCase() == 'checkbox') varElements[varForLoop].checked = false;
+    }
+    var varElements = document.getElementById(Parent).getElementsByTagName('SELECT');
+    for (var varForLoop = 0; varForLoop < varElements.length; varForLoop++) {
+        varElements[varForLoop].selectedIndex = -1;
+    }
+    var varElements = document.getElementById(Parent).getElementsByTagName('textarea');
+    for (var varForLoop = 0; varForLoop < varElements.length; varForLoop++) {
+        varElements[varForLoop].value = '';
+       }
+       return false;
+}   
+
     </script>
 </asp:Content>
 

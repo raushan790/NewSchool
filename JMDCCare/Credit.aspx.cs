@@ -30,6 +30,8 @@ public partial class Credit : System.Web.UI.Page
     protected static string strCon14 = "";
     protected void Page_Load(object sender, EventArgs e)
     {
+        txtDOB.Value = DateTime.Now.ToString("dd/MM/yyyy");
+
         if (!this.IsPostBack)
         {
             Accno.Attributes.Add("onkeypress", "javascript:return fBind_Student(event);");
@@ -37,33 +39,24 @@ public partial class Credit : System.Web.UI.Page
     }
     protected void btnSave_Click(object sender, EventArgs e)
     {
+        string strResult = "";
         try
-        {
-            string strResult = "";
-            //string lblMessage = "";
-            int intCustID = objDbutility.ReturnNumericValue("SELECT ISNULL(MAX(CustomerID),0)+1 FROM CustomerMaster ");
-            string accNo = "0";
-            accNo = objDbutility.ReturnSingleValue("SELECT ISNULL(MAX(CAST([CustomerID] AS Bigint)),0)+1 FROM [CustomerMaster] WHERE ISNUMERIC([CustomerID])= 1 ");
-            Accno.Value = "MI-000" + accNo;
-            strCon1 = "INSERT INTO CustomerMaster (CustomerID,FirstName,MiddleName,LastName,Sex,DateOfBirth,EmailID,ACCNO,PanNo,FatherName,Balance,EntryUserID,EntryDate" +
-                " ) VALUES(" + intCustID + "," + objDbutility.fReplaceChar(firstname.Value.Trim()) + "," + objDbutility.fReplaceChar(middlename.Value.Trim()) + "," +
-                " " + objDbutility.fReplaceChar(lastname.Value.Trim()) + ",'" + (genderM.Checked == true ? 'M' : 'F') + "'," + objDbutility.ReturnDateorNull(txtDOB.Value.Trim()) + "," +
-                " " + objDbutility.fReplaceChar(email.Value.Trim()) + "," + objDbutility.fReplaceChar(Accno.Value.Trim()) + "," + objDbutility.fReplaceChar(panNo.Value.Trim()) + "," +
-                " " + objDbutility.fReplaceChar(FatherName.Value.Trim()) + ",'0.00',1,GETDATE())";
+        {            
+            int intCustID = objDbutility.ReturnNumericValue("SELECT CustomerID FROM CustomerMaster Where ACCNO='"+ Accno.Value.Trim()+"'");
+            int intBalanceID = objDbutility.ReturnNumericValue("SELECT ISNULL(MAX(BalanceID),0)+1 FROM CustBalance ");
+
+            strCon1 = "  INSERT INTO CustBalance (BalanceID,CustomerID,Balance,EntryUserID,EntryDate) " +
+                " VALUES(" + intBalanceID + "," + intCustID + ",'" + balance.Value.Trim() + "',1,GETDATE()) ";
+
+            strCon1 = strCon1 + "~Update CustomerMaster  Set Balance = (Select Sum(isnull(CB.Balance,0)) from CustBalance CB Where CustomerID = " + intCustID + " GROUP BY CB.CustomerID )" +
+                " ,[UpdateDate]=GetDate() Where CustomerID=" + intCustID + "";
             Session["UID"] = "1";
             strCon2 = strCon2 + "~INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuStudent','Student, Name: " + firstname.Value.Trim().Replace("'", "''") + " " + middlename.Value.Trim().Replace("'", "''") + " " +
-                " " + lastname.Value.Trim().Replace("'", "''") + " With Accno No : " + Accno.Value.Trim().Replace("'", "''") + " & Cust ID: " + accNo + "  Is Added In Student Information')";
+                " " + lastname.Value.Trim().Replace("'", "''") + " With Accno No : " + Accno.Value.Trim().Replace("'", "''") + " & Balance Update - added "+ balance.Value +" to main balance')";
             lblMessage.Text = strResult;
             if (strResult == "")
             {
-                if (hdnFlag.Value == "N~" || hdnFlag.Value == "A")
-                {
-                    strResult = objDbutility.pDisplayMessage("", "1", "");
-                }
-                else
-                {
-                    strResult = objDbutility.pDisplayMessage("", "2", "");
-                }
+                strResult = objDbutility.pDisplayMessage("", "2", "");
                 lblMessage.Text = strResult;
 
                 ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
@@ -81,7 +74,8 @@ public partial class Credit : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            ClientScript.RegisterStartupScript(this.GetType(), "displayScript", "<script>alert(" + ex.Message.Replace("'", "") + ");</script>");
+            lblMessage.Text =  "Data not saved please report this to support team";
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
     }
     protected void btnDisplay_Click(object sender, EventArgs e)
@@ -105,8 +99,8 @@ public partial class Credit : System.Web.UI.Page
                 }
                 else
                 {
-                    genderF.Checked = true;
-                    genderM.Checked = false;
+                    genderF.Checked = false;
+                    genderM.Checked = true;
                 }
                 firstname.Value = row["FirstName"].ToString();
                 middlename.Value = row["MiddleName"].ToString();
