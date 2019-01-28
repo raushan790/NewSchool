@@ -18,6 +18,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="main" runat="Server">
     <!-- page content -->
+
         <div id="myModal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -35,7 +36,12 @@
             </div>
         </div>
      </div>
+             <div class="messagealert" id="alert_container">
+            </div>
     <div class="right_col" role="main">
+
+<%--         <div class="messagealert" id="alert_container">
+            </div>--%>
         <div class="">
             <div class="page-title">
                 <div class="title_right">
@@ -121,11 +127,11 @@
                                     </div>
                                 </div>
                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="FatherName">
                                         Father's Name <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" runat="server" id="FatherName" disabled="disabled" name="last-name"  class="form-control col-md-7 col-xs-12">
+                                        <input type="text" runat="server" id="FatherName" disabled="disabled" name="FatherName"  class="form-control col-md-7 col-xs-12">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -158,26 +164,34 @@
                                </div>
 
                                   <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="panNo">
                                         Pan/UID/Adhar No. <span class="required">*</span>
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input type="text" runat="server" disabled="disabled" id="panNo" name="last-name"  placeholder="KYC Details" class="form-control col-md-7 col-xs-12">
+                                        <input type="text" runat="server" disabled="disabled" id="panNo" name="panNo"  placeholder="KYC Details" class="form-control col-md-7 col-xs-12">
                                     </div>
                                 </div>
                                   <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
-                                        Balance
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="balance">
+                                      Main Balance
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input  type="text" runat="server" id="balance"  name="last-name"  placeholder="0.00" class="form-control col-md-7 col-xs-12">
+                                        <input  type="text" runat="server" id="balance" disabled="disabled"  name="balance"  placeholder="0.00" class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
+                                 <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="addbalance">
+                                      Add Balance
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input  type="text" runat="server" id="addbalance"  name="addbalance"  placeholder="0.00" class="form-control col-md-7 col-xs-12">
                                     </div>
                                 </div>
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 <%--                                        <button class="btn btn-primary" type="reset" onclick ="return pClearFields('aspnetForm');">Reset</button>--%>
-                                         <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="New" OnClientClick="return pClearFields1('aspnetForm');" />
+                                         <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="Reset" OnClientClick="return pClearFields1('aspnetForm');" />
                                         <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click"/>
                                          <asp:HiddenField ID="hdnFlag" runat="server" />
                                          <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
@@ -228,17 +242,50 @@
     <script src="assets/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
     <script src="assets/js/StandardValidation.js"></script>
-
+          <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+ 
+    <style type="text/css">
+        .messagealert {
+            width: 100%;
+            position: fixed;
+             top:0px;
+            z-index: 100000;
+            padding: 0;
+            font-size: 15px;
+        }
+    </style>
     <script type="text/javascript">
+                function ShowMessage(message, messagetype) {
+            var cssclass;
+            switch (messagetype) {
+                case 'Success':
+                    cssclass = 'alert-success'
+                    break;
+                case 'Error':
+                    cssclass = 'alert-danger'
+                    break;
+                case 'Warning':
+                    cssclass = 'alert-warning'
+                    break;
+                default:
+                    cssclass = 'alert-info'
+            }
+            $('#alert_container').append('<div id="alert_div" style="margin: 0 0.5%; -webkit-box-shadow: 3px 4px 6px #999;" class="alert fade in ' + cssclass + '"><a id="close" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + messagetype + '!</strong> <span>' + message + '</span></div>');
+        }
+
         function ShowPopup() {
             $("#myModal").modal('show');
             pClearFields('aspnetForm');
             pLockControls('aspnetForm', 'U');
+            Response.redirect('credit.aspx');
         }
         $(document).ready(function () {
+            debugger;
             pLockControls('aspnetForm', 'L');            
             $('#<%=Accno.ClientID%>').attr('readonly', false);
-            $('#<%=balance.ClientID%>').attr('readonly', false);
+            $('#<%=addbalance.ClientID%>').attr('readonly', false);
              $('a.foo.bar[rel="nameClose"]').click(function () {
                  fredirect();
             });        

@@ -80,6 +80,14 @@
                             <br />
                             <div id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
+                                 <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Accno">
+                                       Search By Account
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                        <input type="text" id="txtsearch" runat="server"  class="form-control col-md-7 col-xs-12">
+                                    </div>
+                                </div>
 
                                  <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="Accno">
@@ -153,7 +161,6 @@
                                             <span id="inputSuccess2Status1" class="sr-only">(success)</span>
                                               <input type="hidden" ID="txtDOB" runat="server" />
                                               <input type="hidden" ID="hndAccno" runat="server" />
-
                                 </div>
                                </div>
 
@@ -178,14 +185,15 @@
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                            <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="New" OnClientClick="return fNew();"
                                                OnClick="btnNew_Click" />
-                                        <button type="submit" class="btn btn-primary">Edit</button>
-                                        <button class="btn btn-primary" type="button">Cancel</button>
-                                        <button class="btn btn-primary" type="reset">Reset</button>
+                                        <asp:Button ID="btnEdit" runat="server" class="btn btn-primary"  Text="Edit"  OnClientClick="return fedit();" />
+                                        <asp:Button ID="btnCancel" runat="server" class="btn btn-primary"  Text="Cancel"
+                                               OnClick="btnCancel_Click" />
+<%--                                        <button class="btn btn-primary" type="reset">Reset</button>--%>
                                         <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click"/>
                                                                                         <asp:HiddenField ID="hdnFlag" runat="server" />
-
-
-                                    </div>
+                                         <asp:HiddenField ID="hdnstatus" runat="server" />
+                                        <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
+                                   </div>
                                 </div>
 
                             </div>
@@ -239,22 +247,73 @@
             pLockControls('aspnetForm', 'U');
         }
         $(document).ready(function () {
-            pLockControls('aspnetForm', 'L'); 
-           
-                $('#<%=txtDOB.ClientID%>').val($('#single_cal3').val());
+            pLockControls('aspnetForm', 'L');
+            $('#<%=txtDOB.ClientID%>').val($('#single_cal3').val());
             if ($('#<%=hdnFlag.ClientID%>').val().split('~').length > 1) {
                 if ($('#<%=hdnFlag.ClientID%>').val().split('~')[0] == "N") {
                      pLockControls('aspnetForm', 'U');
                 }
             }
+            $('#<%=txtsearch.ClientID%>').attr('readonly', false);
+            if ($('#<%=hdnstatus.ClientID%>').val() == "C"||  $('#<%=hdnstatus.ClientID%>').val() == "");
+            {
+                $('#<%=btnNew.ClientID%>').attr('disabled', false);
+                $('#<%=btnSave.ClientID%>').attr('disabled', true);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnCancel.ClientID%>').attr('disabled', false);
+            }
+            if ($('#<%=hdnstatus.ClientID%>').val() == "N") {
+                $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', false);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnCancel.ClientID%>').attr('disabled', false);
+            }
+            if ($('#<%=hdnstatus.ClientID%>').val() == "E") {
+                $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', true);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', false);
+                $('#<%=btnCancel.ClientID%>').attr('disabled', false);
+            }
+            if ($('#<%=hdnstatus.ClientID%>').val() == "EE") {
+                $('#<%=btnNew.ClientID%>').attr('disabled', true);
+                $('#<%=btnSave.ClientID%>').attr('disabled', false);
+                $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+                $('#<%=btnCancel.ClientID%>').attr('disabled', false);
+                pLockControls('aspnetForm', 'U');
+            }
              $('a.foo.bar[rel="nameClose"]').click(function () {
                  fredirect();
             });        
         });  
+        function fedit() {
+            $('#<%=hdnstatus.ClientID%>').val("EE");
+        }
         function fNew() {
-            $('#<%=hdnFlag.ClientID%>').val("N~");
+            $('#<%=hdnFlag.ClientID%>').val("N");
+         <%--   $('#<%=btnNew.ClientID%>').attr('disabled', true);
+            $('#<%=btnSave.ClientID%>').attr('disabled', false);
+            $('#<%=btnEdit.ClientID%>').attr('disabled', true);
+            $('#<%=btnCancel.ClientID%>').attr('disabled', false);--%>
             //pLockControls('aspnetForm', 'U');
-            //return false;
+        }
+        function fBind_Student(e) {
+            //debugger;
+            var varKey;
+            if (window.event)
+                varKey = window.event.keyCode;
+            else
+                varKey = e.which;
+            if ($('#<%=txtsearch.ClientID%>').val().length > 0) {
+                if (varKey == 13 || varKey == 0) {
+                    var strArray = $('#<%=txtsearch.ClientID%>').val().split('#');
+                    if (strArray[0] != undefined) {
+                        $('#<%=txtsearch.ClientID%>').val($.trim(strArray[0]));
+                        $('#<%=btnDisplay.ClientID%>').click()
+                        return false;
+                    }
+                    return false;
+                }
+            }
         }
     </script>
 </asp:Content>

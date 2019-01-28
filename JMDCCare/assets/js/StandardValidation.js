@@ -33,7 +33,7 @@ function Priority_Constraint(e) {
         return false;
 }
 function pClearFields(Parent) {
-    debugger;
+    
     var varElements = document.getElementById(Parent).getElementsByTagName('INPUT');
     for (var varForLoop = 0; varForLoop < varElements.length; varForLoop++) {
         if (varElements[varForLoop].type.toLowerCase() == 'text' || varElements[varForLoop].type.toLowerCase() == 'textarea') varElements[varForLoop].value = '';
@@ -66,7 +66,7 @@ function pUnLockControls(Parent) {
     }
 }
 function pLockControls(Parent, cflag) {
-    debugger;
+    
     if (cflag == "L") {
         var varElements = document.getElementById(Parent).getElementsByTagName('INPUT');
         for (var varForLoop = 0; varForLoop < varElements.length; varForLoop++) {
@@ -103,7 +103,7 @@ function pLockControls(Parent, cflag) {
     }
 }
 function ShowPopup() {
-    debugger;
+    
     $("#myModal").modal('show');
     pClearFields('aspnetForm');  
 }

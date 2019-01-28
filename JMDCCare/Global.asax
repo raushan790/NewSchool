@@ -12,5 +12,7 @@
         routes.MapPageRoute("Debit", "Debit", "~/Debit.aspx");
         routes.MapPageRoute("StudentDetails", "StudentDetails", "~/Student.aspx");
         routes.MapPageRoute("AddCustomer", "AddCustomer", "~/NewCustomer.aspx");
+        routes.MapPageRoute("HomePage", "HomePage", "~/HomePage.aspx");
+        
     }
 </script>

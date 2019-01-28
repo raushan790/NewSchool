@@ -11,6 +11,8 @@ using System.Configuration;
 
 public partial class Login : System.Web.UI.Page
 {
+    Dbutility objDbutility = new Dbutility();
+
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -79,7 +81,13 @@ public partial class Login : System.Web.UI.Page
             ShowMessage("Invalid User Id and Password", MessageType.Error);
             return;
         }
-        Session["Text"] = "Raushan";
-        Response.Redirect(ResolveUrl("~/AddCustomer"));
+        if (txtMobileNo.Value == "9540963444")
+        {
+            Response.Redirect(ResolveUrl("~/AddCustomer"));
+        }
+        else
+        {
+            Response.Redirect(ResolveUrl("~/HomePage"));
+        }
     }
 }

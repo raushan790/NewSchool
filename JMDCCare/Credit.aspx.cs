@@ -16,18 +16,6 @@ public partial class Credit : System.Web.UI.Page
     Dbutility objDbutility = new Dbutility();
     protected static string strCon1 = "";
     protected static string strCon2 = "";
-    protected static string strCon3 = "";
-    protected static string strCon4 = "";
-    protected static string strCon5 = "";
-    protected static string strCon6 = "";
-    protected static string strCon7 = "";
-    protected static string strCon8 = "";
-    protected static string strCon9 = "";
-    protected static string strCon10 = "";
-    protected static string strCon11 = "";
-    protected static string strCon12 = "";
-    protected static string strCon13 = "";
-    protected static string strCon14 = "";
     protected void Page_Load(object sender, EventArgs e)
     {
         txtDOB.Value = DateTime.Now.ToString("dd/MM/yyyy");
@@ -37,6 +25,12 @@ public partial class Credit : System.Web.UI.Page
             Accno.Attributes.Add("onkeypress", "javascript:return fBind_Student(event);");
         }
     }
+    public enum MessageType { Success, Error, Info, Warning };
+    protected void ShowMessage(string Message, MessageType type)
+    {
+        ScriptManager.RegisterStartupScript(this, this.GetType(), System.Guid.NewGuid().ToString(), "ShowMessage('" + Message + "','" + type + "');", true);
+    }
+
     protected void btnSave_Click(object sender, EventArgs e)
     {
         string strResult = "";
@@ -46,7 +40,7 @@ public partial class Credit : System.Web.UI.Page
             int intBalanceID = objDbutility.ReturnNumericValue("SELECT ISNULL(MAX(BalanceID),0)+1 FROM CustBalance ");
 
             strCon1 = "  INSERT INTO CustBalance (BalanceID,CustomerID,Balance,EntryUserID,EntryDate) " +
-                " VALUES(" + intBalanceID + "," + intCustID + ",'" + balance.Value.Trim() + "',1,GETDATE()) ";
+                " VALUES(" + intBalanceID + "," + intCustID + ",'" + addbalance.Value.Trim() + "',1,GETDATE()) ";
 
             strCon1 = strCon1 + "~Update CustomerMaster  Set Balance = (Select Sum(isnull(CB.Balance,0)) from CustBalance CB Where CustomerID = " + intCustID + " GROUP BY CB.CustomerID )" +
                 " ,[UpdateDate]=GetDate() Where CustomerID=" + intCustID + "";
@@ -59,18 +53,20 @@ public partial class Credit : System.Web.UI.Page
                 strResult = objDbutility.pDisplayMessage("", "2", "");
                 lblMessage.Text = strResult;
 
-                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                ShowMessage("Data saved successfully!", MessageType.Success);
+
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                ShowMessage("Data saved successfully!", MessageType.Success);
+
+                //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
 
 
-            strResult = objDbutility.ExecuteQuery("EXEC DMLQuery '" + strCon1.Replace("'", "''") + "','" + strCon2.Replace("'", "''") + "','" + strCon3.Replace("'", "''") +
-          "','" + strCon4.Replace("'", "''") + "','" + strCon5.Replace("'", "''") + "','" + strCon6.Replace("'", "''") + "','" + strCon7.Replace("'", "''") + "','" + strCon8.Replace("'", "''") + "','" + strCon9.Replace("'", "''") + "','" + strCon10.Replace("'", "''") + "','" + strCon11.Replace("'", "''") + "','" + strCon12.Replace("'", "''") + "','" + strCon13.Replace("'", "''") + "','" + strCon14.Replace("'", "''") + "'");
-
-
+            strResult = objDbutility.ExecuteQuery("EXEC DMLQuery '" + strCon1.Replace("'", "''") + "','" + strCon2.Replace("'", "''") + "'");
+            btnDisplay_Click(sender, e);
         }
         catch (Exception ex)
         {
@@ -112,6 +108,11 @@ public partial class Credit : System.Web.UI.Page
                 balance.Value = row["Balance"].ToString();
                 Accno.Value= row["ACCNO"].ToString();
             }
+        }
+        else
+        {
+            lblMessage.Text = "Account No. Is Invalid!";
+            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
         }
 
     }
