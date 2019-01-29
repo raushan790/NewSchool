@@ -29,6 +29,7 @@ public partial class NewCustomer : System.Web.UI.Page
                 hdnstatus.Value = "";
             }
             txtsearch.Attributes.Add("onkeypress", "javascript:return fBind_Student(event);");
+
             btnCancel_Click(sender, e);
         }
         if (genderM.Checked == false && genderF.Checked == false)
@@ -107,6 +108,14 @@ public partial class NewCustomer : System.Web.UI.Page
             //string lblMessage = "";
             if (hdnstatus.Value == "EE")
             {
+               string accNo = objDbutility.ReturnSingleValue("SELECT CustomerID FROM [CustomerMaster] WHERE ACCNO  ='"+ Accno.Value.Trim() + "'");
+                strCon1 = "Update CustomerMaster Set FirstName=" + objDbutility.fReplaceChar(firstname.Value.Trim()) + ",MiddleName=" + objDbutility.fReplaceChar(middlename.Value.Trim()) + "" +
+                     " , LastName=" + objDbutility.fReplaceChar(lastname.Value.Trim()) + ",Sex='" + (genderM.Checked == true ? 'M' : 'F') + "',DateOfBirth=" + objDbutility.ReturnDateorNull(txtDOB.Value.Trim()) + ", " +
+                      " EmailID=" + objDbutility.fReplaceChar(email.Value.Trim()) + ",PanNo=" + objDbutility.fReplaceChar(panNo.Value.Trim()) + ",FatherName=" + objDbutility.fReplaceChar(FatherName.Value.Trim()) + "," +
+                      " UpdateUserID = '1',UpdateDate= Getdate() where CustomerID= "+ accNo+"";
+                Session["UID"] = "1";
+                strCon2 = strCon2 + "~INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuStudent','Student, Name: " + firstname.Value.Trim().Replace("'", "''") + " " + middlename.Value.Trim().Replace("'", "''") + " " +
+                    " " + lastname.Value.Trim().Replace("'", "''") + " With Accno No : " + Accno.Value.Trim().Replace("'", "''") + " & Cust ID: " + accNo + "  Is updated')";
 
             }
             else

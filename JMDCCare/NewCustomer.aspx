@@ -189,8 +189,8 @@
                                         <asp:Button ID="btnCancel" runat="server" class="btn btn-primary"  Text="Cancel"
                                                OnClick="btnCancel_Click" />
 <%--                                        <button class="btn btn-primary" type="reset">Reset</button>--%>
-                                        <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click"/>
-                                                                                        <asp:HiddenField ID="hdnFlag" runat="server" />
+                                        <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click" />
+                                         <asp:HiddenField ID="hdnFlag" runat="server" />
                                          <asp:HiddenField ID="hdnstatus" runat="server" />
                                         <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
                                    </div>
@@ -247,6 +247,8 @@
             pLockControls('aspnetForm', 'U');
         }
         $(document).ready(function () {
+            debugger;
+            $('#txtDOB').val($('#single_cal1').val());
             pLockControls('aspnetForm', 'L');
             $('#<%=txtDOB.ClientID%>').val($('#single_cal3').val());
             if ($('#<%=hdnFlag.ClientID%>').val().split('~').length > 1) {

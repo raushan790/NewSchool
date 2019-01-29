@@ -19,7 +19,7 @@ function fValidateDelete() {
     }
 }
 function fredirect() {
-    window.location = "../TitleSetting.aspx";
+    window.location = "../AddCustomer";
 }
 function Priority_Constraint(e) {
     var varKey;

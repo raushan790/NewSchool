@@ -23,6 +23,7 @@ public partial class Credit : System.Web.UI.Page
         if (!this.IsPostBack)
         {
             Accno.Attributes.Add("onkeypress", "javascript:return fBind_Student(event);");
+            addbalance.Attributes.Add("onkeypress", "javascript:return fNumberonly(event);");
         }
     }
     public enum MessageType { Success, Error, Info, Warning };
@@ -35,8 +36,8 @@ public partial class Credit : System.Web.UI.Page
     {
         string strResult = "";
         try
-        {            
-            int intCustID = objDbutility.ReturnNumericValue("SELECT CustomerID FROM CustomerMaster Where ACCNO='"+ Accno.Value.Trim()+"'");
+        {
+            int intCustID = objDbutility.ReturnNumericValue("SELECT CustomerID FROM CustomerMaster Where ACCNO='" + Accno.Value.Trim() + "'");
             int intBalanceID = objDbutility.ReturnNumericValue("SELECT ISNULL(MAX(BalanceID),0)+1 FROM CustBalance ");
 
             strCon1 = "  INSERT INTO CustBalance (BalanceID,CustomerID,Balance,EntryUserID,EntryDate) " +
@@ -46,11 +47,11 @@ public partial class Credit : System.Web.UI.Page
                 " ,[UpdateDate]=GetDate() Where CustomerID=" + intCustID + "";
             Session["UID"] = "1";
             strCon2 = strCon2 + "~INSERT INTO UserUpdateDetails(UID,SessionID,UpdateDate,FormName,Details) VALUES('" + Session["UID"] + "','" + Session.SessionID + "',GETDATE(),'mnuStudent','Student, Name: " + firstname.Value.Trim().Replace("'", "''") + " " + middlename.Value.Trim().Replace("'", "''") + " " +
-                " " + lastname.Value.Trim().Replace("'", "''") + " With Accno No : " + Accno.Value.Trim().Replace("'", "''") + " & Balance Update - added "+ balance.Value +" to main balance')";
+                " " + lastname.Value.Trim().Replace("'", "''") + " With Accno No : " + Accno.Value.Trim().Replace("'", "''") + " & Balance Update - added " + balance.Value + " to main balance')";
             lblMessage.Text = strResult;
             if (strResult == "")
             {
-                strResult = objDbutility.pDisplayMessage("", "2", "");
+                strResult = objDbutility.pDisplayMessage("","2","");
                 lblMessage.Text = strResult;
 
                 //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
@@ -60,7 +61,6 @@ public partial class Credit : System.Web.UI.Page
             else
             {
                 ShowMessage("Data saved successfully!", MessageType.Success);
-
                 //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
             }
 
@@ -70,51 +70,58 @@ public partial class Credit : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            lblMessage.Text =  "Data not saved please report this to support team";
-            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+            lblMessage.Text = "Data not saved please report this to support team";
+            //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+            ShowMessage("Data not saved please report this to support team!", MessageType.Error);
         }
     }
     protected void btnDisplay_Click(object sender, EventArgs e)
     {
-        if (objDbutility.ReturnNumericValue("Select Count(*) From CustomerMaster Where ACCNO='" + Accno.Value.Trim().Replace("'", "''") + "' ") > 0)
+        try
         {
-            int CustomerID = objDbutility.ReturnNumericValue("Select CustomerID From  CustomerMaster Where ACCNO='" + Accno.Value.Trim().Replace("'", "''") + "' ");
-            if (CustomerID == 0)
+            if (objDbutility.ReturnNumericValue("Select Count(*) From CustomerMaster Where ACCNO='" + Accno.Value.Trim().Replace("'", "''") + "' ") > 0)
             {
-                return;
+                int CustomerID = objDbutility.ReturnNumericValue("Select CustomerID From  CustomerMaster Where ACCNO='" + Accno.Value.Trim().Replace("'", "''") + "' ");
+                if (CustomerID == 0)
+                {
+                    return;
+                }
+                DataTable dtCust = new DataTable();
+                dtCust = objDbutility.BindDataTable("Select * From CustomerMaster Where CustomerID='" + CustomerID + "'");
+                foreach (DataRow row in dtCust.Rows)
+                {
+                    string gender = row["Sex"].ToString();
+                    if (gender == "F")
+                    {
+                        genderF.Checked = true;
+                        genderM.Checked = false;
+                    }
+                    else
+                    {
+                        genderF.Checked = false;
+                        genderM.Checked = true;
+                    }
+                    firstname.Value = row["FirstName"].ToString();
+                    middlename.Value = row["MiddleName"].ToString();
+                    lastname.Value = row["LastName"].ToString();
+                    txtDOB.Value = row["DateOfBirth"].ToString();
+                    email.Value = row["EmailID"].ToString();
+                    FatherName.Value = row["FatherName"].ToString();
+                    panNo.Value = row["PanNo"].ToString();
+                    balance.Value = row["Balance"].ToString();
+                    Accno.Value = row["ACCNO"].ToString();
+                }
             }
-            DataTable dtCust = new DataTable();
-            dtCust = objDbutility.BindDataTable("Select * From CustomerMaster Where CustomerID='" + CustomerID + "'");
-            foreach (DataRow row in dtCust.Rows)
+            else
             {
-                string gender= row["Sex"].ToString(); 
-                if(gender=="F")
-                {
-                    genderF.Checked = true;
-                    genderM.Checked = false;
-                }
-                else
-                {
-                    genderF.Checked = false;
-                    genderM.Checked = true;
-                }
-                firstname.Value = row["FirstName"].ToString();
-                middlename.Value = row["MiddleName"].ToString();
-                lastname.Value = row["LastName"].ToString();
-                txtDOB.Value = row["DateOfBirth"].ToString();
-                email.Value = row["EmailID"].ToString();
-                FatherName.Value = row["FatherName"].ToString();
-                panNo.Value = row["PanNo"].ToString();
-                balance.Value = row["Balance"].ToString();
-                Accno.Value= row["ACCNO"].ToString();
+                lblMessage.Text = "Account No. Is Invalid!";
+                //ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+                ShowMessage("Account No. Is Invalid!", MessageType.Warning);
             }
         }
-        else
+        catch(Exception ex)
         {
-            lblMessage.Text = "Account No. Is Invalid!";
-            ClientScript.RegisterStartupScript(this.GetType(), "myModal", "ShowPopup();", true);
+            ShowMessage("Something went wrong, zplease contact support!", MessageType.Error);
         }
-
     }
-
 }

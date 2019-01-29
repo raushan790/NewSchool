@@ -25,22 +25,30 @@ public partial class Login : System.Web.UI.Page
     public bool ValidatePassword()
     {
         bool chkValue = false;
-        DataTable dt = new DataTable();
+        //DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        //using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        //{
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd.Connection = con;
+        //    cmd.CommandText = "SELECT Email FROM userDetails where MobileNo='" + txtMobileNo.Value + "' and Password='" + txtPassword.Value + "' ";
+        //    con.Open();
+        //    SqlDataAdapter da = new SqlDataAdapter();
+        //    da.SelectCommand = cmd;
+        //    da.Fill(dt);
+
+        //    if (dt.Rows.Count > 0)
+        //        chkValue = false;
+        //    else
+        //        chkValue = true;
+        //}
+        if (objDbutility.ReturnNumericValue("SELECT count(*) FROM userDetails where MobileNo='" + txtMobileNo.Value + "' and Password='" + txtPassword.Value + "' ") == 0)
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = "SELECT Email FROM userDetails where MobileNo='" + txtMobileNo.Value + "' and Password='" + txtPassword.Value + "' ";
-            con.Open();
-            SqlDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = cmd;
-            da.Fill(dt);
-
-            if (dt.Rows.Count > 0)
-                chkValue = false;
-            else
-                chkValue = true;
+            chkValue = true;
+        }
+        else
+        {
+            chkValue = false;
         }
         return chkValue;
     }
@@ -48,23 +56,31 @@ public partial class Login : System.Web.UI.Page
     {
         string email = txtMobileNo.Value;
         bool chkValue = false;
-        DataTable dt = new DataTable();
+        //DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        //using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        //{
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd.Connection = con;
+        //    //  cmd.CommandType = CommandType.StoredProcedure;
+        //    cmd.CommandText = "SELECT MobileNo FROM userDetails where MobileNo='" + txtMobileNo.Value + "' ";
+        //    con.Open();
+        //    SqlDataAdapter da = new SqlDataAdapter();
+        //    da.SelectCommand = cmd;
+        //    da.Fill(dt);
+
+        //    if (dt.Rows.Count > 0)
+        //        chkValue = false;
+        //    else
+        //        chkValue = true;
+        //}
+        if(objDbutility.ReturnNumericValue("SELECT count(*) FROM userDetails where MobileNo='" + txtMobileNo.Value + "' ")==0)
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            //  cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SELECT MobileNo FROM userDetails where MobileNo='" + txtMobileNo.Value + "' ";
-            con.Open();
-            SqlDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = cmd;
-            da.Fill(dt);
-
-            if (dt.Rows.Count > 0)
-                chkValue = false;
-            else
-                chkValue = true;
+            chkValue = true;           
+        }
+        else
+        {
+           chkValue = false;
         }
         return chkValue;
     }
@@ -81,13 +97,13 @@ public partial class Login : System.Web.UI.Page
             ShowMessage("Invalid User Id and Password", MessageType.Error);
             return;
         }
-        if (txtMobileNo.Value == "9540963444")
+        if (txtMobileNo.Value == "9540963444" || txtMobileNo.Value == "9643587034")
         {
-            Response.Redirect(ResolveUrl("~/AddCustomer"));
+            Response.Redirect(ResolveUrl("~/NewCustomer.aspx"));
         }
         else
         {
-            Response.Redirect(ResolveUrl("~/HomePage"));
+            Response.Redirect(ResolveUrl("~/HomePage.aspx"));
         }
     }
 }

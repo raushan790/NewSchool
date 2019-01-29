@@ -25,7 +25,7 @@ public partial class Sign_in : System.Web.UI.Page
         bool chkValue = false;
         DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
@@ -48,7 +48,7 @@ public partial class Sign_in : System.Web.UI.Page
         bool chkValue = false;
         DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;

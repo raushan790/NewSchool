@@ -9,7 +9,7 @@ public partial class HomePage : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        string yy = Session["Text"].ToString();
+        //string yy = Session["Text"].ToString();
 
     }
 }

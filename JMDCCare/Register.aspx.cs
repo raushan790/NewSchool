@@ -12,6 +12,7 @@ using System.Configuration;
 
 public partial class Register : System.Web.UI.Page
 {
+    Dbutility objDbutility = new Dbutility();
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -33,12 +34,12 @@ public partial class Register : System.Web.UI.Page
     }
     protected void btnSignup_Click(object sender, EventArgs e)
     {
-        if (ValidateMobileNo())
+        if (!ValidateMobileNo())
         {
             ShowMessage("Mobile No. already registered", MessageType.Error);
             return;
         }
-        if (ValidateEmail_Server())
+        if (!ValidateEmail_Server())
         {
             ShowMessage("Email already registered", MessageType.Error);
             return;
@@ -51,29 +52,30 @@ public partial class Register : System.Web.UI.Page
 
         if (Page.IsValid)
         {
-            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
-            {
-                SqlCommand cmd = new SqlCommand();
+            ////using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+            ////{
+            //SqlCommand cmd = new SqlCommand();
 
-                Guid guid;
-                guid = Guid.NewGuid();
+            //Guid guid;
+            //guid = Guid.NewGuid();
 
-                string sql = "INSERT INTO userDetails (FullName,MobileNo,Email,UserName,Password)";
-                sql += "VALUES (@FullName,@MobileNo,@Email,@UserName,@Password)";
+            //string sql = "INSERT INTO userDetails (FullName,MobileNo,Email,UserName,Password)";
+            //sql += "VALUES (@FullName,@MobileNo,@Email,@UserName,@Password)";
 
-                cmd.Parameters.AddWithValue("@FullName", txtFullName.Value.Trim());
-                cmd.Parameters.AddWithValue("@MobileNo", txtMobileNo.Value.Trim());
-                cmd.Parameters.AddWithValue("@Email", Email.Value.Trim());
-                cmd.Parameters.AddWithValue("@UserName", "Test");
-                cmd.Parameters.AddWithValue("@Password", txtPassword.Value);
+            //cmd.Parameters.AddWithValue("@FullName", txtFullName.Value.Trim());
+            //cmd.Parameters.AddWithValue("@MobileNo", );
+            //cmd.Parameters.AddWithValue("@Email", Email.Value.Trim());
+            //cmd.Parameters.AddWithValue("@UserName", "Test");
+            //cmd.Parameters.AddWithValue("@Password", txtPassword.Value);
 
-                cmd.Connection = con;
-                cmd.CommandText = sql;
-                con.Open();
-
+            //cmd.Connection = con;
+            //cmd.CommandText = sql;
+            //con.Open();
+            objDbutility.ExecuteQuery("INSERT INTO userDetails (FullName,MobileNo,Email,UserName,Password) VALUES ('"+ txtFullName.Value.Trim() + "', " +
+                " '"+ txtMobileNo.Value.Trim() + "','" + Email.Value.Trim() + "',' ','" + txtPassword.Value.Trim() + "')");
                 try
                 {
-                    cmd.ExecuteNonQuery();
+                   //cmd.ExecuteNonQuery();
                     ClearTextBoxes();
                     //ShowMessage("Record submitted successfully", MessageType.Success);
                     Response.Redirect("ThankYou.aspx");
@@ -82,7 +84,7 @@ public partial class Register : System.Web.UI.Page
                 {
                     throw new Exception(ex.Message);
                 }
-            }
+            ////}
         }
 
     }
@@ -102,50 +104,48 @@ public partial class Register : System.Web.UI.Page
 
     public bool ValidateEmail_Server()
     {
-        string email = Email.Value;
         bool chkValue = false;
-        DataTable dt = new DataTable();
+        //DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        //using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString))
+        //{
+        //    SqlCommand cmd = new SqlCommand();
+        //    cmd.Connection = con;
+        //    //  cmd.CommandType = CommandType.StoredProcedure;
+        //    cmd.CommandText = "SELECT Email FROM userDetails where Email='" + email + "' ";
+        //    con.Open();
+        //    SqlDataAdapter da = new SqlDataAdapter();
+        //    da.SelectCommand = cmd;
+        //    da.Fill(dt);
+
+        //    if (dt.Rows.Count > 0)
+        //        chkValue = true;
+        //    else
+        //        chkValue = false;
+        //}
+        if (objDbutility.ReturnNumericValue("SELECT count(*) FROM userDetails where Email='" + Email.Value + "' ") == 0)
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            //  cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SELECT Email FROM userDetails where Email='" + email + "' ";
-            con.Open();
-            SqlDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = cmd;
-            da.Fill(dt);
-
-            if (dt.Rows.Count > 0)
-                chkValue = true;
-            else
-                chkValue = false;
+            chkValue = true;
+        }
+        else
+        {
+            chkValue = false;
         }
         return chkValue;
     }
     public bool ValidateMobileNo()
     {
-        string email = txtMobileNo.Value;
         bool chkValue = false;
-        DataTable dt = new DataTable();
 
-        using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["CM_Connection"].ConnectionString))
+        if (objDbutility.ReturnNumericValue("SELECT count(*) FROM userDetails where MobileNo='" + txtMobileNo.Value + "' ") == 0)
         {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            //  cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SELECT MobileNo FROM userDetails where MobileNo='" + txtMobileNo.Value + "' ";
-            con.Open();
-            SqlDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = cmd;
-            da.Fill(dt);
-
-            if (dt.Rows.Count > 0)
-                chkValue = true;
-            else
-                chkValue = false;
+            chkValue = true;
+        }
+        else
+        {
+            chkValue = false;
         }
         return chkValue;
     }
+
 }

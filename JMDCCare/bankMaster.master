@@ -47,11 +47,11 @@
                             <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu">     
-                                    <li><a href='<%=ResolveUrl("~/AddCustomer") %>'>Create New Customer</a></li>
+                                    <li><a href='NewCustomer.aspx'>Create New Customer</a></li>
                                     <li><a><i class="fa fa-cog"></i>Transaction Entry<span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href='<%=ResolveUrl("~/Credit") %>'>Credit To Customer Account</a></li>
-                                            <li><a href='<%=ResolveUrl("~/Debit") %>'>Debit From Customer Account</a></li>
+                                            <li><a href='Credit.aspx'>Credit To Customer Account</a></li>
+                                            <li><a href='Debit.aspx'>Debit From Customer Account</a></li>
                                         </ul>
                                     </li>
    

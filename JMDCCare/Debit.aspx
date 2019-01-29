@@ -1,10 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/bankMaster.master" AutoEventWireup="true" CodeFile="Debit.aspx.cs" Inherits="Debit" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %>
 
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <!-- bootstrap-wysiwyg -->
-    <link href="assets/vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
     <!-- Select2 -->
     <link href="assets/vendors/select2/dist/css/select2.min.css" rel="stylesheet">
     <!-- Switchery -->
@@ -44,13 +41,15 @@
         <div class="">
             <div class="page-title">
                 <div class="title_right">
-                    <h3>Customer Registration</h3>
+                    <h3>Debit Information</h3>
                 </div>
 
                 <div class="title_left">
                     <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                         <div class="input-group">
+<%--                            <input type="text" class="form-control" placeholder="Search for...">--%>
                             <span class="input-group-btn">
+<%--                                <button class="btn btn-default" type="button">Go!</button>--%>
                             </span>
                         </div>
                     </div>
@@ -61,19 +60,11 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
+                            <h2><small><span style="color:red;">*</span>Please type account no. and press enter....</small></h2>
                             <ul class="nav navbar-left panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Settings 1</a>
-                                        </li>
-                                        <li><a href="#">Settings 2</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                <li><a class="foo bar" rel="nameClose" href="../debit"><i class="fa fa-close"></i></a>
                                 </li>
                             </ul>
                             <div class="clearfix"></div>
@@ -177,7 +168,7 @@
                                 </div>
                                  <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="addbalance">
-                                      Add Balance
+                                      Debit Balance
                                     </label>
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input  type="text" runat="server" id="addbalance"  name="addbalance"  placeholder="0.00" class="form-control col-md-7 col-xs-12">
@@ -186,11 +177,10 @@
                                 <div class="ln_solid"></div>
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-<%--                                        <button class="btn btn-primary" type="reset" onclick ="return pClearFields('aspnetForm');">Reset</button>--%>
-                                         <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="Reset" OnClientClick="return pClearFields1('aspnetForm');" />
+                                        <asp:Button ID="btnNew" runat="server" class="btn btn-primary"  Text="Reset" OnClientClick="return pClearFields1('aspnetForm');" />
                                         <asp:Button ID="btnSave" runat="server"  class="btn btn-primary" Text="Save" OnClick="btnSave_Click"/>
-                                         <asp:HiddenField ID="hdnFlag" runat="server" />
-                                         <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
+                                        <asp:HiddenField ID="hdnFlag" runat="server" />
+                                        <asp:Button ID="btnDisplay" runat="server" Text="Display" OnClick="btnDisplay_Click" Style="display: none;" />
 
                                     </div>
                                 </div>
@@ -225,10 +215,7 @@
     <script src="assets/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
     <!-- starrr -->
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
-
-
-
-        <script src="assets/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="assets/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
     <script src="assets/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
     <script src="assets/vendors/google-code-prettify/src/prettify.js"></script>
     <script src="assets/vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
@@ -238,22 +225,19 @@
     <script src="assets/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
     <script src="assets/vendors/starrr/dist/starrr.js"></script>
     <script src="assets/js/StandardValidation.js"></script>
-          <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
- 
-    <style type="text/css">
+           <style type="text/css">
         .messagealert {
             width: 100%;
-            position: fixed;
-             top:0px;
-            z-index: 100000;
-            padding: 0;
-            font-size: 15px;
-        }
+        position: fixed;
+         top:0px;
+        z-index: 100000;
+        padding: 0;
+        font-size: 15px;
+    }
     </style>
-    <script type="text/javascript">
-                function ShowMessage(message, messagetype) {
+<script type="text/javascript">
+
+            function ShowMessage(message, messagetype) {
             var cssclass;
             switch (messagetype) {
                 case 'Success':
@@ -268,9 +252,8 @@
                 default:
                     cssclass = 'alert-info'
             }
-            $('#alert_container').append('<div id="alert_div" style="margin: 0 0.5%; -webkit-box-shadow: 3px 4px 6px #999;" class="alert fade in ' + cssclass + '"><a id="close" href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + messagetype + '!</strong> <span>' + message + '</span></div>');
+            $('#alert_container').append('<div id="alert_div" style="margin: 0 0.5%; -webkit-box-shadow: 3px 4px 6px #999;" class="alert fade in ' + cssclass + '"><a id="close" href="../credit.aspx" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>' + messagetype + '!</strong> <span>' + message + '</span></div>');
         }
-
         function ShowPopup() {
             $("#myModal").modal('show');
             pClearFields('aspnetForm');
@@ -282,9 +265,9 @@
             pLockControls('aspnetForm', 'L');            
             $('#<%=Accno.ClientID%>').attr('readonly', false);
             $('#<%=addbalance.ClientID%>').attr('readonly', false);
-             $('a.foo.bar[rel="nameClose"]').click(function () {
-                 fredirect();
-            });        
+            // $('a.foo.bar[rel="nameClose"]').click(function () {
+            //     fredirect();
+            //});        
         });  
         function fBind_Student(e) {
             //debugger;
@@ -322,9 +305,5 @@
        return false;
 }   
 
-    </script>
-</asp:Content>
-
-
-
+    </script></asp:Content>
 
